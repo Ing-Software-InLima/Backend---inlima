@@ -1,0 +1,41 @@
+#######
+GET http://localhost:3001/usuario
+
+######
+POST http://localhost:3001/usuario/login
+
+Content-Type: application/json
+
+{
+    "email": "usuario@ulima.com",
+    "password": "usuario"
+}
+
+#######
+
+GET http://localhost:3001/sexo
+
+#######
+POST https://jcromaina-20232-prograweb-as-api.azurewebsites.net/alumno
+Content-Type: application/json
+
+{
+    "nombre": "Rodolfo",
+    "apellido": "Arellano",
+    "idCarrera": 2
+}
+
+######
+
+PUT http://localhost:3001/alumno
+Content-Type: application/json
+
+{
+    "id": 2,
+    "nombre": "Ana Lucia",
+    "apellido": "Mendez",
+    "curso": "Derecho Penal"
+}
+
+######
+DELETE http://localhost:3001/alumno/1
