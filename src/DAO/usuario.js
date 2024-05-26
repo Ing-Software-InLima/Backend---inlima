@@ -17,15 +17,9 @@ const findOne = async (id) => {
 };
 
 const findOneByEmail = async (email) => {
-    try {
-        return await modelo.findOne({
-            where: { email }
-        })
-    }
-    catch(err) {
-        console.error(err);
-        return null;
-    }
+    return await modelo.findOne({
+        where: { email }
+    })
 };
 
 const update = async (data) => {
