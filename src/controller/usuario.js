@@ -3,11 +3,8 @@ import jwt from 'jsonwebtoken'
 
 const iniciarSesion = async (req, res) => {
   const { email, password } = req.body;
-  console.log("inicio sesion entry")
   try {
     const usuarioEncontrado = await usuarioDAO.findOneByEmail(email)
-    if (usuarioEncontrado) console.log("Se encontro el usuario")
-
     if (usuarioEncontrado && usuarioEncontrado.password === password) {
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
@@ -27,9 +24,9 @@ const iniciarSesion = async (req, res) => {
 };
 
 const cerrarSesion = async (req, res) => {
-  const myToken = req.cookie?.myToken
+  const myToken = req.cookies?.myToken
   try {
-    jwt.verify(myToken, "secret")
+    jwt.verify(myToken, 'secret')
     res.cookie('myToken', null, { maxAge: 0 })
     res.status(200).json("Sesion cerrada correctamente")
   } catch (error) {
