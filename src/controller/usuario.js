@@ -37,6 +37,29 @@ const cerrarSesion = async (req, res) => {
   }
 }
 
-const usuarioController = { iniciarSesion, cerrarSesion };
+const actualizarCuenta = async (req, res) => {
+  try{
+    const { email, password, nombre, apellido_paterno, apellido_materno, foto, rol_id, sexo_id} = req.body;
+    const usuario = await usuarioDAO.findOneByEmail(email);
+
+    await usuarioDAO.update({
+      id: usuario.id,
+      email: email,
+      password: password,
+      nombre: nombre,
+      apellido_paterno: apellido_paterno,
+      apellido_materno: apellido_materno,
+      foto: foto,
+      rol_id: rol_id,
+      sexo_id: sexo_id
+    })
+
+    return res.status(200).json({ success: true, message: 'Datos actualizados con exito' });
+  }catch(error){
+    return res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta };
 
 export default usuarioController;

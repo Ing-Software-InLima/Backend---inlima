@@ -35,12 +35,13 @@ const registrar = async (req, res) => {
     }
 };
 
+/*
 const cambiarFoto = async (req, res) => {
     try{
         const { foto, email } = req.body;
         const usuario = await usuarioDAO.findOneByEmail(email);
         await usuarioDAO.update({
-            id: 1,
+            id: usuario.id,
             email: usuario.email,
             password: usuario.password,
             nombre: usuario.nombre,
@@ -55,7 +56,7 @@ const cambiarFoto = async (req, res) => {
     }catch(error){
         return res.status(500).json({ success: false, message: error.message });
     }
-};
+};*/
 
 const enviarQueja = async (req, res) => {
     try{
@@ -104,6 +105,6 @@ const getQuejas = async (req, res) => {
     }
 };
 
-const ciudadanoController = { registrar, getQuejas, cambiarFoto, enviarQueja, verEstadoQueja };
+const ciudadanoController = { registrar, getQuejas, enviarQueja, verEstadoQueja };
 
 export default ciudadanoController;
