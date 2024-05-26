@@ -1,16 +1,22 @@
 #######
 GET http://localhost:3001/usuario
 
-######
+######  
 POST http://localhost:3001/usuario/login
-
 Content-Type: application/json
 
 {
     "email": "usuario@ulima.com",
     "password": "usuario"
 }
+######
+POST http://localhost:3001/ciudadano/getall
+Content-Type: application/json
 
+{
+    "email": "usuario@ulima.com"
+}
+#######
 #######
 
 GET http://localhost:3001/sexo
