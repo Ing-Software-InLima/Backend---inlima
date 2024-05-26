@@ -1,6 +1,7 @@
 import quejaDAO from '../DAO/queja.js';
 import usuarioDAO from '../DAO/usuario.js';
 import ciudadanoDAO from '../DAO/ciudadano.js';
+import municipalidadDAO from '../DAO/municipalidad.js';
 
 const agregarQueja = async (req, res) => {
     const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad, email } = req.body;
@@ -25,6 +26,7 @@ const agregarQueja = async (req, res) => {
             ubicacion_descripcion: ubicacion_descripcion,
             latitud: latitud,
             longitud: longitud,
+            fecha: new Date(),
             estado_id: 1,
             ciudadano_id: ciudadano.id,
             municipalidad_id: municipalidad
@@ -37,6 +39,86 @@ const agregarQueja = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja };
+const actualizarQueja = async (req, res) => {
+    try{
+        const { queja_id, estado_id } = req.body;
+        const queja = await quejaDAO.findOne(queja_id);
+        
+        await quejaDAO.update({
+            id: queja.id,
+            asunto: queja.asunto,
+            descripcion: queja.descripcion,
+            foto: queja.foto,
+            ubicacion_descripcion: queja.ubicacion_descripcion,
+            latitud: queja.latitud,
+            longitud: queja.longitud,
+            fecha: queja.fecha,
+            estado_id: estado_id,
+            ciudadano_id: queja.ciudadano_id,
+            municipalidad_id: queja.municipalidad_id
+        })
+
+        return res.status(200).json({ success: true, message: 'Actualización realizada con exito' });
+    }catch(error){
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const encontrarUbicacion = async (req, res) => {
+    try{
+        const { queja_id } = req.body;
+        const queja = await quejaDAO.findOne(queja_id);
+        const ubicacion = queja.ubicacion_descripcion;
+
+        return res.status(200).json({ success: true, message: ubicacion });
+    }catch(erro){
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const encontrarDistrito = async (req, res) => {
+    try{
+        const { queja_id } = req.body;
+        const queja = await quejaDAO.findOne(queja_id);
+        const municipalidad_id = queja.municipalidad_id;
+        const municipalidad = await municipalidadDAO.findOne(municipalidad_id);
+
+        return res.status(200).json({ success: true, message: municipalidad.nombre });
+    }catch(erro){
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const obtenerQuejasFiltradas = async (req, res) => {
+    const { asuntos, municipalidad } = req.query;
+
+    try {
+        const asuntosArray = asuntos ? asuntos.split(',') : [];
+        const resultados = await quejaDAO.findFiltered(asuntosArray, municipalidad);
+        console.log("Resultados de la búsqueda:", resultados); // Imprimir en consola para verificar los resultados
+        res.status(200).json(resultados);
+    } catch (error) {
+        console.error('Error al obtener las quejas:', error);
+        res.status(500).json({ error: 'Error al obtener las quejas' });
+    }
+};
+
+const obtenerQuejaConDetalles = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const queja = await quejaDAO.findOneByCiudadanoId(id);
+        if (queja) {
+            return res.status(200).json(queja);
+        } else {
+            return res.status(404).json({ success: false, message: "Queja no encontrada" });
+        }
+    } catch (error) {
+        console.error('Error al obtener la queja:', error);
+        return res.status(500).json({ error: 'Error al obtener la queja' });
+    }
+};
+
+const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles}
 
 export default quejaController;

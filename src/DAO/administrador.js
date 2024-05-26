@@ -1,5 +1,5 @@
 import RepositoryBase from "../repository/base.js";
-import modelo from '../model/administador.js';
+import modelo from '../model/administrador.js';
 
 const administradorRepository = new RepositoryBase(modelo);
 
@@ -15,6 +15,12 @@ const findOne = async (id) => {
     return await administradorRepository.findOne(id);
 };
 
+const findOneByUserID = async (usuario_id) => {
+    return await modelo.findOne({
+        where: { usuario_id }
+    })
+}
+
 const update = async (data) => {
     return await administradorRepository.update(data);
 };
@@ -23,6 +29,6 @@ const remove = async (id) => {
     return await administradorRepository.remove(id);
 };
 
-const administradorDAO = { findAll, create, findOne, update, remove };
+const administradorDAO = { findAll, create, findOne, findOneByUserID, update, remove };
 
 export default administradorDAO;

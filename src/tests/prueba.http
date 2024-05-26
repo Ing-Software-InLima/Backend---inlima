@@ -1,6 +1,16 @@
 #######
 GET http://localhost:3001/usuario
 
+######
+POST http://localhost:3001/historial/register
+Content-Type: application/json
+
+{
+    "queja_id": 1,
+    "email": "admin@admin.com",
+    "estado_id": 4
+}
+
 ######  
 POST http://localhost:3001/usuario/login
 Content-Type: application/json
