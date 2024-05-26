@@ -89,6 +89,36 @@ const encontrarDistrito = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion }
+const obtenerQuejasFiltradas = async (req, res) => {
+    const { asuntos, municipalidad } = req.query;
+
+    try {
+        const asuntosArray = asuntos ? asuntos.split(',') : [];
+        const resultados = await quejaDAO.findFiltered(asuntosArray, municipalidad);
+        console.log("Resultados de la búsqueda:", resultados); // Imprimir en consola para verificar los resultados
+        res.status(200).json(resultados);
+    } catch (error) {
+        console.error('Error al obtener las quejas:', error);
+        res.status(500).json({ error: 'Error al obtener las quejas' });
+    }
+};
+
+const obtenerQuejaConDetalles = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const queja = await quejaDAO.findOneByCiudadanoId(id);
+        if (queja) {
+            return res.status(200).json(queja);
+        } else {
+            return res.status(404).json({ success: false, message: "Queja no encontrada" });
+        }
+    } catch (error) {
+        console.error('Error al obtener la queja:', error);
+        return res.status(500).json({ error: 'Error al obtener la queja' });
+    }
+};
+
+const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles}
 
 export default quejaController;
