@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 import cors from 'cors'
-
+import cookieParser from 'cookie-parser';
 import administradorRoutes from './routes/administrador.js'
 import ciudadanoRoutes from './routes/ciudadano.js'
 import estadoRoutes from './routes/estado.js'
@@ -14,7 +14,13 @@ import usuarioRoutes from './routes/usuario.js'
 
 var app = express();
 app.use(bodyParser.json())
-app.use(cors())
+const corsOptions = {
+    origin: 'http://localhost:3000', //Origen del frontend
+    credentials: true
+}
+app.use(cors(corsOptions));
+
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     return res.json({ result: 'OK'})

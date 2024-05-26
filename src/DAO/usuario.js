@@ -17,15 +17,16 @@ const findOne = async (id) => {
 };
 
 const findOneByEmail = async (email) => {
-    try {
+    //try {
         return await modelo.findOne({
             where: { email }
         })
+    /*
     }
     catch(err) {
         console.error(err);
         return null;
-    }
+    }*/
 };
 
 const update = async (data) => {
