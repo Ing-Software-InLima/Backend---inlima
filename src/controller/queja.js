@@ -4,20 +4,23 @@ import ciudadanoDAO from '../DAO/ciudadano.js';
 import municipalidadDAO from '../DAO/municipalidad.js';
 
 const agregarQueja = async (req, res) => {
-    const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad, email } = req.body;
+    const myToken = req.cookies?.mytoken;
     try {
-        const usuario = await usuarioDAO.findOneByEmail(email);
-        if (!usuario) {
-            return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
         }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { id } = decoded;
 
-        const ciudadano = await ciudadanoDAO.findOne(usuario.id);
+        const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad } = req.body;
+
+        const ciudadano = await ciudadanoDAO.findOne(id);
         if (!ciudadano) {
             return res.status(404).json({ success: false, message: "Ciudadano no encontrado" });
         }
 
-        console.log("Usuario ID:", usuario.id);
-        console.log("Ciudadano ID:", ciudadano.id);
+        //console.log("Usuario ID:", id);
+        //console.log("Ciudadano ID:", ciudadano.id);
 
         const queja = await quejaDAO.create({
             asunto: asunto,
