@@ -9,6 +9,7 @@ const iniciarSesion = async (req, res) => {
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
+        id: usuarioEncontrado.id,
         email: usuarioEncontrado.email, //nose si email o correo
         nombre: usuarioEncontrado.nombre,
         foto: usuarioEncontrado.foto
@@ -35,12 +36,18 @@ const cerrarSesion = async (req, res) => {
 }
 
 const actualizarCuenta = async (req, res) => {
+  const myToken = req.cookies?.mytoken;
   try{
+    if (!myToken) {
+      return res.status(401).json({ success: false, message: 'No se encontró el token' });
+    }
+    const decoded = jwt.verify(myToken, 'secret');
+    const { id } = decoded;
+    
     const { email, password, nombre, apellido_paterno, apellido_materno, foto, rol_id, sexo_id} = req.body;
-    const usuario = await usuarioDAO.findOneByEmail(email);
 
     await usuarioDAO.update({
-      id: usuario.id,
+      id: id,
       email: email,
       password: password,
       nombre: nombre,
