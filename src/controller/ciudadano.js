@@ -6,7 +6,7 @@ import estadoDAO from '../DAO/estado.js';
 
 const registrar = async (req, res) => {
     try {
-        const { email, password, nombre, apellido_paterno, apellido_materno, dni, sexo, foto } = req.body;
+        const { email, password, nombre, apellido_paterno, apellido_materno, dni, sexo, foto, numero } = req.body;
         const ciudadano = await usuarioDAO.findOneByEmail(email);
 
         if (ciudadano) {
@@ -18,15 +18,17 @@ const registrar = async (req, res) => {
                 password: password,
                 foto: foto,
                 rol_id: 2,
-                sexo_id: sexo
+                sexo_id: sexo,
+                apellido_paterno: apellido_paterno,
+                apellido_materno: apellido_materno,
             })
 
             const id = usuario.id
             await ciudadanoDAO.create({
                 dni: dni,
-                apellido_paterno: apellido_paterno,
-                apellido_materno: apellido_materno,
+                numero: numero,
                 usuario_id: id
+                
             })
             return res.status(200).json({ success: true, message: 'Usuario creado exitosamente' });
         }
