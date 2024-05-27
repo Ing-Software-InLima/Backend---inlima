@@ -90,11 +90,10 @@ const encontrarDistrito = async (req, res) => {
 };
 
 const obtenerQuejasFiltradas = async (req, res) => {
-    const { asuntos, municipalidad } = req.query;
-
+    console.log("Ingreso a obtener quejas filtred")
     try {
-        const asuntosArray = asuntos ? asuntos.split(',') : [];
-        const resultados = await quejaDAO.findFiltered(asuntosArray, municipalidad);
+        const {asuntos, municipalidad} = req.body;
+        const resultados = await quejaDAO.findFiltered(asuntos, municipalidad);
         console.log("Resultados de la búsqueda:", resultados); // Imprimir en consola para verificar los resultados
         res.status(200).json(resultados);
     } catch (error) {

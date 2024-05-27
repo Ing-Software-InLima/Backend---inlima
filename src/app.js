@@ -9,6 +9,8 @@ import quejaRoutes from './routes/queja.js'
 import rolRoutes from './routes/rol.js'
 import sexoRoutes from './routes/sexo.js'
 import usuarioRoutes from './routes/usuario.js'
+import administradorRoutes from './routes/administrador.js'
+import historialRoutes from './routes/historial.js'
 import cookieParser from 'cookie-parser'
 
 var app = express();
@@ -40,5 +42,6 @@ app.use("/queja", quejaRoutes)
 app.use("/rol", rolRoutes)
 app.use("/sexo", sexoRoutes)
 app.use("/usuario", usuarioRoutes)
-
+app.use("/administrador", administradorRoutes)
+app.use("/historial", historialRoutes)
 export default app;

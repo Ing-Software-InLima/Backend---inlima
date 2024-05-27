@@ -3,9 +3,9 @@ class RepositoryBase {
         this.modelo = modelo;
     }
 
-    findAll = async () => {
+    findAll = async (props = {}) => {
         try {
-            const result = await this.modelo.findAll();
+            const result = await this.modelo.findAll(props);
             return result;
         } catch(err) {
             console.error(err);

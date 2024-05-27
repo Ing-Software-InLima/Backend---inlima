@@ -1,5 +1,4 @@
 import express from 'express'
-
 import controller from '../controllers/queja.js'
 import controller2 from '../controller/queja.js'
 
@@ -10,7 +9,7 @@ routes.post('/update', controller2.actualizarQueja)
 routes.post('/distrito', controller2.encontrarDistrito)
 routes.post('/ubicacion', controller2.encontrarUbicacion)
 routes.get('/:id', controller2.obtenerQuejaConDetalles);
-routes.get('/search', controller2.obtenerQuejasFiltradas);
+routes.post('/search', controller2.obtenerQuejasFiltradas);//
 routes.get('/', controller.findAll ) 
 routes.post('/', controller.create )
 routes.get('/:id', controller.findOne )

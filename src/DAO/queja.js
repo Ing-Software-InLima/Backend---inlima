@@ -4,7 +4,7 @@ import modelo from '../model/queja.js';
 import Ciudadano from '../model/ciudadano.js'
 import Municipalidad from '../model/municipalidad.js'
 import Estado from '../model/estado.js'
-
+import Op from 'sequelize'
 
 const quejaRepository = new RepositoryBase(modelo);
 
@@ -42,20 +42,30 @@ const remove = async (id) => {
 
 const findFiltered = async (asuntos, municipalidad) => {
     try {
+        console.log("FUNCION EN DAO", asuntos, municipalidad)
         const whereConditions = {
-            ...(asuntos.length > 0 && { asunto: asuntos }),
-            ...(municipalidad && { '$Municipalidad.nombre$': municipalidad }),
+            ...(asuntos.length > 0 && { 'asunto': asuntos }),
+            ...(municipalidad && { 'municipalidad_id': municipalidad }),
         };
         console.log('whereConditions:', whereConditions);
     
-        return await modelo.findAll({
+        const respuesta = await quejaRepository.findAll({
             where: whereConditions,
             include: [
-                { model: Estado, attributes: ['nombre'] },
-                { model: Ciudadano, attributes: ['dni'] },
-                { model: Municipalidad, attributes: ['nombre'] },
-            ],
+                { model: Estado},
+                { model: Ciudadano},
+                { model: Municipalidad},
+            ]
+
         });
+        console.log("respuesta", respuesta)
+        if(respuesta){
+            const datavaluesArray = respuesta.map(queja => queja.dataValues);
+            return datavaluesArray
+        }else{
+            return []
+        }
+        
     } catch (error) {
         console.error('Error en findFiltered:', error);
         return null;
