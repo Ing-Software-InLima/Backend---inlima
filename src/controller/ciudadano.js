@@ -92,11 +92,17 @@ const verEstadoQueja = async (req, res) => {
 };
 
 const getQuejas = async (req, res) => {
+    const myToken = req.cookies?.mytoken;
     try {
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
+        }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { id } = decoded;
         //const { ciudadano_id } = req.body;
-        const { email } = req.body;
-        const usuario = await usuarioDAO.findOneByEmail(email);
-        const ciudadano = await ciudadanoDAO.findOneByUserID(usuario.id);
+        //const { email } = req.body;
+        //const usuario = await usuarioDAO.findOneByEmail(email);
+        const ciudadano = await ciudadanoDAO.findOneByUserID(id);
         const quejas = await quejaDAO.findAllbyCiudadanoID(ciudadano.id);
         //const quejas = await quejaDAO.findAllbyCiudadanoID(ciudadano_id);
         return res.status(200).json(quejas);

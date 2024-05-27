@@ -11,7 +11,7 @@ routes.get('/', controller.findAll)
 //routes.put('/', controller.update )
 //routes.delete('/:id', controller.remove)
 routes.post('/login', controller2.iniciarSesion)
-//routes.get('/logout', controller2.cerrarSesion)
+routes.get('/logout', controller2.cerrarSesion)
 routes.post('/update', controller2.actualizarCuenta)
 
 export default routes
