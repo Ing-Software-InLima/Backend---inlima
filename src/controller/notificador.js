@@ -10,7 +10,7 @@ const enviarCorreo = async (req, res) => {
             from: 'inLimaApp@gmail.com',
             to: email,
             subject: 'INLIMA: HOLAAAAAAA',
-            html: <p>Cambio el estado de tu queja a ${estado}</p>
+            html: `<p>Cambio el estado de tu queja a ${estado}</p>`
         });
 
         res.status(200).json({ message: 'Email sent successfully' });
