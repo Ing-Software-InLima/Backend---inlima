@@ -10,7 +10,7 @@ const iniciarSesion = async (req, res) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
         id: usuarioEncontrado.id,
-        email: usuarioEncontrado.email, //nose si email o correo
+        email: usuarioEncontrado.email,
         nombre: usuarioEncontrado.nombre,
         foto: usuarioEncontrado.foto
       }, 'secret')
@@ -64,6 +64,24 @@ const actualizarCuenta = async (req, res) => {
   }
 }
 
-const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta };
+const obtenerRol = (req, res) => {
+  const myToken = req.cookies?.myToken;
+
+  if (!myToken) {
+    return res.status(401).json({ success: false, message: 'Token no encontrado' });
+  }
+
+  try {
+    const decoded = jwt.verify(myToken, 'secret');
+    const { rol } = decoded;
+    return res.status(200).json({ success: true, rol });
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return res.status(500).json({ success: false, message: 'Error decodificando el token' });
+  }
+};
+
+
+const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol };
 
 export default usuarioController;
