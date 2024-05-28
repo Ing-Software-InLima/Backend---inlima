@@ -16,7 +16,8 @@ import notificadorRoutes from './routes/notificador.js'
 import cookieParser from 'cookie-parser'
 
 var app = express();
-app.use(bodyParser.json())
+//app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '100mb' }));
 const corsOptions = {
     origin: 'http://localhost:3000', // Origen del frontend
     credentials: true
