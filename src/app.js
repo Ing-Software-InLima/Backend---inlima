@@ -11,6 +11,7 @@ import sexoRoutes from './routes/sexo.js'
 import usuarioRoutes from './routes/usuario.js'
 import administradorRoutes from './routes/administrador.js'
 import historialRoutes from './routes/historial.js'
+import notificadorRoutes from './routes/notificador.js'
 import cookieParser from 'cookie-parser'
 
 var app = express();
@@ -44,4 +45,6 @@ app.use("/sexo", sexoRoutes)
 app.use("/usuario", usuarioRoutes)
 app.use("/administrador", administradorRoutes)
 app.use("/historial", historialRoutes)
+app.use("/notificador",notificadorRoutes)
+
 export default app;
