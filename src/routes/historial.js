@@ -1,3 +1,4 @@
+// src/routes/historial.js
 import express from 'express'
 
 import controller from '../controllers/historial.js'

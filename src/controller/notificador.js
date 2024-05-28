@@ -1,4 +1,6 @@
+// src/controller/notificador.js
 import { Resend } from 'resend';
+
 
 const resend = new Resend('re_G3gjJPcj_Cxw87BFq6umvtGjukjeQM7Rt');
 
