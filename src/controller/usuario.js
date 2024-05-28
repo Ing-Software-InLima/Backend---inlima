@@ -1,4 +1,5 @@
 import usuarioDAO from '../DAO/usuario.js';
+import ciudadanoDAO from '../DAO/ciudadano.js';
 import jwt from 'jsonwebtoken'
 
 const iniciarSesion = async (req, res) => {
@@ -81,7 +82,21 @@ const obtenerRol = (req, res) => {
   }
 };
 
+const encontrarUsuario = async (req, res) => {
+  const { id_ciudadano } = req.body;
 
-const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol };
+  try {
+    const ciudadanoEncontrado = await ciudadanoDAO.findOne(id_ciudadano)
+    const usuarioEncontrado = await usuarioDAO.findOne(ciudadanoEncontrado.usuario_id)
+    return res.status(200).json({ success: true, usuarioEncontrado });
+  } catch (error) {
+
+    return res.status(500).json({ success: false, message: 'No se encontró el usuario' });
+  }
+};
+
+
+
+const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario};
 
 export default usuarioController;
