@@ -2,14 +2,17 @@ import quejaDAO from '../DAO/queja.js';
 import usuarioDAO from '../DAO/usuario.js';
 import ciudadanoDAO from '../DAO/ciudadano.js';
 import municipalidadDAO from '../DAO/municipalidad.js';
-
+import jwt from 'jsonwebtoken'
 const agregarQueja = async (req, res) => {
-    const myToken = req.cookies?.mytoken;
+    console.log("cesar sapo")
+    console.log("cookie", req.cookies)
+    const myToken = req.cookies?.myToken;
     try {
         if (!myToken) {
             return res.status(401).json({ success: false, message: 'No se encontró el token' });
         }
         const decoded = jwt.verify(myToken, 'secret');
+        console.log("decoded", decoded)
         const { id } = decoded;
 
         const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad } = req.body;
@@ -34,7 +37,7 @@ const agregarQueja = async (req, res) => {
             ciudadano_id: ciudadano.id,
             municipalidad_id: municipalidad
         });
-
+        console.log("QUEJA CREADA")
         return res.status(200).json({ success: true, message: "Queja enviada", data: queja });
     } catch (error) {
         console.error("Error al agregar queja:", error); // Agregar logs detallados

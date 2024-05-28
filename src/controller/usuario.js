@@ -10,7 +10,7 @@ const iniciarSesion = async (req, res) => {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
         id: usuarioEncontrado.id,
-        email: usuarioEncontrado.email, //nose si email o correo
+        email: usuarioEncontrado.email,
         nombre: usuarioEncontrado.nombre,
         foto: usuarioEncontrado.foto
       }, 'secret')
