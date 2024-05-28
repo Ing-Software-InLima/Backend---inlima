@@ -13,6 +13,7 @@ routes.post('/search', controller2.obtenerQuejasFiltradas);
 routes.get('/', controller.findAll ) 
 routes.post('/', controller.create )
 //routes.get('/:id', controller.findOne )
+routes.post('/updateEstado/:id', controller2.updateEstado); 
 routes.put('/', controller.update )
 routes.delete('/:id', controller.remove)
 routes.get('/quejasUsuario', controller2.getQuejasUsuario)

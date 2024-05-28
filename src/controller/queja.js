@@ -124,6 +124,17 @@ const obtenerQuejaConDetalles = async (req, res) => {
     }
 };
 
+const updateEstado = async (req, res) => {
+    const { id } = req.params;
+    const { estado_id } = req.body;
+    try {
+        const queja = await quejaDAO.updateEstado(id, estado_id);
+        return res.status(200).json({ message: 'Estado actualizado con éxito', queja });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al actualizar el estado', error });
+    }
+};
+
 const getQuejasUsuario = async (req, res) => {
     console.log("Get quejas usuario--------------------------------------------------------------------")
     const myToken = req.cookies?.myToken;
@@ -142,6 +153,7 @@ const getQuejasUsuario = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario}
+const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado}
+
 
 export default quejaController;

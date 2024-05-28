@@ -93,6 +93,20 @@ const findOneByCiudadanoId = async (id) => {
     }
 };
 
-const quejaDAO = { findAll, findAllbyCiudadanoID, create, findOne, update, remove , findFiltered, findOneByCiudadanoId};
+const updateEstado = async (id, estado_id) => {
+    try {
+        const queja = await findOne(id);
+        if (!queja) {
+            throw new Error('Queja no encontrada.');
+        }
+        queja.estado_id = estado_id;
+        await queja.save();
+        return queja;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+const quejaDAO = { findAll, findAllbyCiudadanoID, create, findOne, update, remove , findFiltered, findOneByCiudadanoId, updateEstado};
 
 export default quejaDAO;
