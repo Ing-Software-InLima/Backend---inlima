@@ -1,3 +1,4 @@
+// src/routes/notificador.js
 import express from 'express'
 
 import controller from '../controller/notificador.js'
