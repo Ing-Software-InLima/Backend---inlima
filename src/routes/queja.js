@@ -8,12 +8,12 @@ routes.post('/create', controller2.agregarQueja)
 routes.post('/update', controller2.actualizarQueja)
 routes.post('/distrito', controller2.encontrarDistrito)
 routes.post('/ubicacion', controller2.encontrarUbicacion)
-routes.get('/:id', controller2.obtenerQuejaConDetalles);
+routes.get('/id/:id', controller2.obtenerQuejaConDetalles);
 routes.post('/search', controller2.obtenerQuejasFiltradas);
 routes.get('/', controller.findAll ) 
 routes.post('/', controller.create )
 //routes.get('/:id', controller.findOne )
 routes.put('/', controller.update )
 routes.delete('/:id', controller.remove)
-
+routes.get('/quejasUsuario', controller2.getQuejasUsuario)
 export default routes

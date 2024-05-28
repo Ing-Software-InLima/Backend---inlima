@@ -4,8 +4,7 @@ import ciudadanoDAO from '../DAO/ciudadano.js';
 import municipalidadDAO from '../DAO/municipalidad.js';
 import jwt from 'jsonwebtoken'
 const agregarQueja = async (req, res) => {
-    //console.log("cesar sapo")
-    //console.log("cookie", req.cookies)
+    console.log("agregar queja")
     const myToken = req.cookies?.myToken;
     try {
         if (!myToken) {
@@ -109,6 +108,7 @@ const obtenerQuejasFiltradas = async (req, res) => {
 };
 
 const obtenerQuejaConDetalles = async (req, res) => {
+    console.log("obtener queja con detalles")
     const { id } = req.params;
 
     try {
@@ -124,6 +124,24 @@ const obtenerQuejaConDetalles = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles}
+const getQuejasUsuario = async (req, res) => {
+    console.log("Get quejas usuario--------------------------------------------------------------------")
+    const myToken = req.cookies?.myToken;
+    try {
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
+        }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { id } = decoded;
+        const ciudadano = await ciudadanoDAO.findOneByUserID(id);
+        console.log("ciudadano id: ", ciudadano.id)
+        const quejas = await quejaDAO.findAllbyCiudadanoID(ciudadano.id);
+        return res.status(200).json(quejas);
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+const quejaController = { agregarQueja, actualizarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario}
 
 export default quejaController;

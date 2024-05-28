@@ -15,7 +15,12 @@ const findAll = async () => {
 const findAllbyCiudadanoID = async (ciudadano_id) => {
     try {
         return await modelo.findAll({
-            where: { ciudadano_id }
+            where: { ciudadano_id },
+            include: [
+                { model: Estado},
+                { model: Ciudadano, attributes: ['dni'] },
+                { model: Municipalidad},
+            ]
         })
     }
     catch(err) {
