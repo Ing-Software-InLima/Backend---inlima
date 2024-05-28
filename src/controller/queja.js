@@ -4,15 +4,15 @@ import ciudadanoDAO from '../DAO/ciudadano.js';
 import municipalidadDAO from '../DAO/municipalidad.js';
 import jwt from 'jsonwebtoken'
 const agregarQueja = async (req, res) => {
-    console.log("cesar sapo")
-    console.log("cookie", req.cookies)
+    //console.log("cesar sapo")
+    //console.log("cookie", req.cookies)
     const myToken = req.cookies?.myToken;
     try {
         if (!myToken) {
             return res.status(401).json({ success: false, message: 'No se encontró el token' });
         }
         const decoded = jwt.verify(myToken, 'secret');
-        console.log("decoded", decoded)
+        //console.log("decoded", decoded)
         const { id } = decoded;
 
         const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad } = req.body;

@@ -64,6 +64,24 @@ const actualizarCuenta = async (req, res) => {
   }
 }
 
-const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta };
+const obtenerRol = (req, res) => {
+  const myToken = req.cookies?.myToken;
+
+  if (!myToken) {
+    return res.status(401).json({ success: false, message: 'Token no encontrado' });
+  }
+
+  try {
+    const decoded = jwt.verify(myToken, 'secret');
+    const { rol } = decoded;
+    return res.status(200).json({ success: true, rol });
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return res.status(500).json({ success: false, message: 'Error decodificando el token' });
+  }
+};
+
+
+const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol };
 
 export default usuarioController;
