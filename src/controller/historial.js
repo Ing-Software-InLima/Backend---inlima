@@ -5,7 +5,7 @@ import historialDAO from '../DAO/historial.js';
 import jwt from 'jsonwebtoken';
 
 const registrarCambio = async (req, res) => {
-    const myToken = req.cookies?.mytoken;
+    const myToken = req.cookies?.myToken;
     try {
         if (!myToken) {
             return res.status(401).json({ success: false, message: 'No se encontró el token' });
