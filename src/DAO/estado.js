@@ -4,9 +4,13 @@ import modelo from '../model/estado.js';
 
 const estadoRepository = new RepositoryBase(modelo);
 
-const findAll = async () => {
-    return await estadoRepository.findAll();
-};
+const findAll = async (req,res) => {
+
+    const estados = await estadoRepository.findAll();
+
+    return res.status(200).json(estados);
+
+}
 
 const create = async (data) => {
     return await estadoRepository.create(data);

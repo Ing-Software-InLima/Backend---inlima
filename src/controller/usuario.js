@@ -95,8 +95,6 @@ const encontrarUsuario = async (req, res) => {
   }
 };
 
-
-
 const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario};
 
 export default usuarioController;

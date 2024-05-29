@@ -4,9 +4,13 @@ import modelo from '../model/sexo.js';
 
 const sexoRepository = new RepositoryBase(modelo);
 
-const findAll = async () => {
-    return await sexoRepository.findAll();
-};
+const findAll = async (req,res) => {
+
+    const sexos = await Repository.findAll();
+
+    return res.status(200).json(sexos);
+
+}
 
 const create = async (data) => {
     return await sexoRepository.create(data);

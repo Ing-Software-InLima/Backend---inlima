@@ -4,9 +4,12 @@ import modelo from '../model/municipalidad.js';
 
 const municipalidadRepository = new RepositoryBase(modelo);
 
-const findAll = async () => {
-    return await municipalidadRepository.findAll();
-};
+const findAll = async (req,res) => {
+
+    const municipalidades = await municipalidadRepository.findAll();
+
+    return res.status(200).json(municipalidades);
+}
 
 const create = async (data) => {
     return await municipalidadRepository.create(data);

@@ -6,11 +6,10 @@ import controller2 from '../controller/ciudadano.js'
 const routes = express.Router()
 
 routes.post('/signin',controller2.registrar)
-routes.get('/getall', controller2.getQuejas)
 routes.get('/', controller.findAll ) 
-routes.post('/', controller.create )
-routes.get('/:id', controller.findOne )
-routes.put('/', controller.update )
-routes.delete('/:id', controller.remove)
+//routes.post('/', controller.create )
+//routes.get('/:id', controller.findOne )
+//routes.put('/', controller.update )
+//routes.delete('/:id', controller.remove)
 
 export default routes
