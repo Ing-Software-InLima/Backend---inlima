@@ -17,7 +17,7 @@ const registrar = async (req, res) => {
                 email: email,
                 password: password,
                 foto: foto,
-                rol_id: 2,
+                rol_id: 1,
                 sexo_id: sexo,
                 apellido_paterno: apellido_paterno,
                 apellido_materno: apellido_materno,
