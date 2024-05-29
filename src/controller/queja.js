@@ -15,6 +15,7 @@ const agregarQueja = async (req, res) => {
         //console.log("decoded", decoded)
         //console.log("decoded", decoded)
         const { id } = decoded;
+        console.log(id);
 
         const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad } = req.body;
 
