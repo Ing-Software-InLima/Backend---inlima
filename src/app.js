@@ -19,11 +19,13 @@ var app = express();
 app.use(bodyParser.json())
 const corsOptions = {
     origin: 'http://localhost:3000', // Origen del frontend
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
+app.use(bodyParser.json({ limit: '100mb' }));
 
 // Middleware para configurar las cabeceras de caché
 app.use((req, res, next) => {
