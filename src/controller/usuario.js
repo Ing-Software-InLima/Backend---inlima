@@ -82,9 +82,9 @@ const obtenerRol = (req, res) => {
   }
 };
 
+// src/controller/usuario.js
 const encontrarUsuario = async (req, res) => {
   const { id_ciudadano } = req.body;
-
   try {
     const ciudadanoEncontrado = await ciudadanoDAO.findOne(id_ciudadano)
     const usuarioEncontrado = await usuarioDAO.findOne(ciudadanoEncontrado.usuario_id)

@@ -23,8 +23,7 @@ const agregarQueja = async (req, res) => {
             return res.status(404).json({ success: false, message: "Ciudadano no encontrado" });
         }
 
-        //console.log("Usuario ID:", id);
-        //console.log("Ciudadano ID:", ciudadano.id);
+        console.log("aea", req.body)
 
         console.log(foto);
 
