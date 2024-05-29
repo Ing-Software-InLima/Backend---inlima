@@ -13,10 +13,11 @@ const agregarQueja = async (req, res) => {
         const decoded = jwt.verify(myToken, 'secret');
         //console.log("decoded", decoded)
         const { id } = decoded;
+        console.log(id);
 
         const { asunto, descripcion, foto, ubicacion_descripcion, latitud, longitud, municipalidad } = req.body;
 
-        const ciudadano = await ciudadanoDAO.findOne(id);
+        const ciudadano = await ciudadanoDAO.findOneByUserID(id);
         if (!ciudadano) {
             return res.status(404).json({ success: false, message: "Ciudadano no encontrado" });
         }
