@@ -43,36 +43,91 @@ const enviarCorreo = async (req, res) => {
                 accessToken: oAuth2Client.getAccessToken(),
             }
         });
-        const { email, estado, queja, nombre } = req.body;
+        const { email, estado, queja, nombre, asunto, fecha } = req.body;
 
         // Configurar el correo
         const mailOptions = {
             from: 'inLimaApp@gmail.com',
             to: email,
-            subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET ${queja}`,
+            subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET IL00${queja}`,
             html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
-                    <div style="text-align: center; padding: 20px;">
-                        <img src="https://i.imgur.com/h6xBALR.png" alt="INLIMA Logo" style="width: 150px; margin-bottom: 20px;">
-                    </div>
-                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
-                        Hola <strong>${nombre}</strong>,
-                    </p>
-                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
-                        Queremos informarte que el estado de tu queja ha cambiado a <strong style="color: #007bff;">${estado}</strong>.
-                    </p>
-                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
-                        Si tienes alguna pregunta o necesitas más información, no dudes en ponerte en contacto con nosotros.
-                    </p>
-                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
-                        Atentamente,<br>
-                        <strong>El equipo de InLima</strong>
-                    </p>
-                    
-                    <footer style="margin-top: 20px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #e0e0e0; padding-top: 20px;">
-                        © 2024 INLIMA. Todos los derechos reservados.
-                    </footer>
-                </div>
+            <div style="
+    font-family: Arial, sans-serif; 
+    max-width: 600px; 
+    margin: 30px auto; 
+    border: 1px solid #e0e0e0; 
+    padding: 30px; 
+    border-radius: 15px; 
+    background-color: #ffffff; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+">
+    <div style="
+        text-align: center; 
+        padding: 20px 0;
+    ">
+        <img 
+            src="https://i.imgur.com/h6xBALR.png" 
+            alt="INLIMA Logo" 
+            style="
+                width: 150px; 
+                margin-bottom: 20px;
+            "
+        >
+    </div>
+    <p style="
+        font-size: 18px; 
+        color: #444; 
+        margin: 20px 0;
+    ">
+        Hola <strong style="color: #C52233;">${nombre}</strong>,
+    </p>
+    <p style="
+        font-size: 16px; 
+        color: #555; 
+        margin: 20px 0;
+    ">
+        Queremos informarte que el estado de tu queja ha cambiado a 
+        <strong style="color: #28a745;">${estado}</strong>.
+    </p>
+    <div style="
+        font-size: 16px; 
+        color: #555; 
+        margin: 20px 0; 
+        background-color: #f8f9fa; 
+        padding: 15px; 
+        border-left: 4px solid #C52233;
+    ">
+        <p><strong>Detalles de su queja:</strong></p>
+        <p><strong>Asunto:</strong> ${asunto}</p>
+        <p><strong>Fecha:</strong> ${fecha}</p>
+    </div>
+    <p style="
+        font-size: 16px; 
+        color: #555; 
+        margin: 20px 0;
+    ">
+        Si tienes alguna pregunta o necesitas más información, no dudes en ponerte en contacto con nosotros.
+    </p>
+    <p style="
+        font-size: 16px; 
+        color: #555; 
+        margin: 20px 0;
+    ">
+        Atentamente,<br>
+        <strong>El equipo de InLima</strong>
+    </p>
+    <footer style="
+        margin-top: 30px; 
+        font-size: 14px; 
+        color: #777; 
+        text-align: center; 
+        border-top: 1px solid #e0e0e0; 
+        padding-top: 20px;
+    ">
+        © 2024 INLIMA. Todos los derechos reservados.
+    </footer>
+</div>
+
         `
         };
 
