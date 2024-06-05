@@ -12,11 +12,12 @@ const enviarCorreo = async (req, res) => {
                 token_uri: "https://oauth2.googleapis.com/token",
                 auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
                 client_secret: "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",
+
                 redirect_uris: [
                     "urn:ietf:wg:oauth:2.0:oob",
                     "http://localhost"
                 ],
-                refresh_token: "1//04Tga2nXJgfRwCgYIARAAGAQSNwF-L9IrlGgd7nWo63bPx6-DsfTw8DGdzQ4vZ2DulnnaKXprxKEtjPOisyHsoWv5xb8oEW1VbNY"
+                refresh_token: "1//04r9KC04Akr6aCgYIARAAGAQSNwF-L9IrcxvwoModx9lj_-bbfQaxUXqtd9oytvsQc1uDBSAnZss1Sh-YshvgXpY10XTjsmBgvXg"
             }
         };
         const oAuth2Client = new google.auth.OAuth2(
@@ -50,25 +51,28 @@ const enviarCorreo = async (req, res) => {
             to: email,
             subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET ${queja}`,
             html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
-                <h2 style="color: #007bff; text-align: center;">INLIMA</h2>
-                <p style="font-size: 16px; color: #333;">
-                    Hola ${nombre},
-                </p>
-                <p style="font-size: 16px; color: #333;">
-                    Queremos informarte que el estado de tu queja ha cambiado a <strong>${estado}</strong>.
-                </p>
-                <p style="font-size: 16px; color: #333;">
-                    Si tienes alguna pregunta o necesitas más información, no dudes en ponerte en contacto con nosotros.
-                </p>
-                <p style="font-size: 16px; color: #333;">
-                    Atentamente,<br>
-                    El equipo de INLIMA
-                </p>
-                <footer style="margin-top: 20px; font-size: 12px; color: #777; text-align: center;">
-                    © 2024 INLIMA. Todos los derechos reservados.
-                </footer>
-            </div>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
+                    <div style="text-align: center; padding: 20px;">
+                        <img src="https://i.imgur.com/h6xBALR.png" alt="INLIMA Logo" style="width: 150px; margin-bottom: 20px;">
+                    </div>
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        Hola <strong>${nombre}</strong>,
+                    </p>
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        Queremos informarte que el estado de tu queja ha cambiado a <strong style="color: #007bff;">${estado}</strong>.
+                    </p>
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        Si tienes alguna pregunta o necesitas más información, no dudes en ponerte en contacto con nosotros.
+                    </p>
+                    <p style="font-size: 16px; color: #333; margin: 20px 0;">
+                        Atentamente,<br>
+                        <strong>El equipo de InLima</strong>
+                    </p>
+                    
+                    <footer style="margin-top: 20px; font-size: 12px; color: #777; text-align: center; border-top: 1px solid #e0e0e0; padding-top: 20px;">
+                        © 2024 INLIMA. Todos los derechos reservados.
+                    </footer>
+                </div>
         `
         };
 
