@@ -42,14 +42,34 @@ const enviarCorreo = async (req, res) => {
                 accessToken: oAuth2Client.getAccessToken(),
             }
         });
-        const { email, estado } = req.body;
+        const { email, estado, queja, nombre } = req.body;
 
         // Configurar el correo
         const mailOptions = {
             from: 'inLimaApp@gmail.com',
             to: email,
-            subject: 'INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA',
-            html: `<p>Cambio el estado de tu queja a ${estado}</p>`
+            subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET ${queja}`,
+            html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px;">
+                <h2 style="color: #007bff; text-align: center;">INLIMA</h2>
+                <p style="font-size: 16px; color: #333;">
+                    Hola ${nombre},
+                </p>
+                <p style="font-size: 16px; color: #333;">
+                    Queremos informarte que el estado de tu queja ha cambiado a <strong>${estado}</strong>.
+                </p>
+                <p style="font-size: 16px; color: #333;">
+                    Si tienes alguna pregunta o necesitas más información, no dudes en ponerte en contacto con nosotros.
+                </p>
+                <p style="font-size: 16px; color: #333;">
+                    Atentamente,<br>
+                    El equipo de INLIMA
+                </p>
+                <footer style="margin-top: 20px; font-size: 12px; color: #777; text-align: center;">
+                    © 2024 INLIMA. Todos los derechos reservados.
+                </footer>
+            </div>
+        `
         };
 
         // Enviar el correo
