@@ -13,6 +13,7 @@ routes.get('/', controller.findAll)
 routes.post('/encontrarCiudadano', controller2.encontrarUsuario)
 routes.get('/getrol',controller2.obtenerRol)
 routes.post('/login', controller2.iniciarSesion)
+routes.post('/loginGoogle', controller2.iniciarSesionGoogle)
 routes.get('/logout', controller2.cerrarSesion)
 routes.post('/update', controller2.actualizarCuenta)
 

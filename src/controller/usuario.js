@@ -25,6 +25,29 @@ const iniciarSesion = async (req, res) => {
   }
 };
 
+const iniciarSesionGoogle = async (req, res) => {
+  const { email} = req.body;
+  try {
+    const usuarioEncontrado = await usuarioDAO.findOneByEmail(email)
+    if (usuarioEncontrado ) {
+      const token = jwt.sign({
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
+        rol: usuarioEncontrado.rol_id,
+        id: usuarioEncontrado.id,
+        email: usuarioEncontrado.email,
+        nombre: usuarioEncontrado.nombre,
+        foto: usuarioEncontrado.foto
+      }, 'secret')
+      res.cookie('myToken', token)
+      return res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
+    } else {
+      return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
+    }
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 const cerrarSesion = async (req, res) => {
   const myToken = req.cookies?.myToken
   try {
@@ -95,6 +118,6 @@ const encontrarUsuario = async (req, res) => {
   }
 };
 
-const usuarioController = { iniciarSesion, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario};
+const usuarioController = { iniciarSesion, iniciarSesionGoogle, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario};
 
 export default usuarioController;

@@ -6,6 +6,7 @@ import controller2 from '../controller/ciudadano.js'
 const routes = express.Router()
 
 routes.post('/signin',controller2.registrar)
+routes.post('/signinGoogle',controller2.registrarGoogle)
 routes.get('/', controller.findAll ) 
 //routes.post('/', controller.create )
 //routes.get('/:id', controller.findOne )
