@@ -4,7 +4,6 @@ import modelo from '../model/queja.js';
 import Ciudadano from '../model/ciudadano.js'
 import Municipalidad from '../model/municipalidad.js'
 import Estado from '../model/estado.js'
-import Op from 'sequelize'
 
 const quejaRepository = new RepositoryBase(modelo);
 
@@ -45,32 +44,75 @@ const remove = async (id) => {
     return await quejaRepository.remove(id);
 };
 
+const ASUNTOS_PREDEFINIDOS = [
+    "Veredas rotas", "Calles contaminadas", "Poste de luces apagadas",
+    "Construcción sin licencia", "Comercio ilegal", "Invasión no autorizada de lugares públicos",
+    "Árboles obstruyen la circulación", "Vehículo abandonado", "Mascota perdida",
+    "Inmueble abandonado", "Propiedad en mal estado"
+];
+
 const findFiltered = async (asuntos, municipalidad) => {
     try {
-        console.log("FUNCION EN DAO", asuntos, municipalidad)
-        const whereConditions = {
-            ...(asuntos.length > 0 && { 'asunto': asuntos }),
-            ...(municipalidad && { 'municipalidad_id': municipalidad }),
-        };
+        console.log("FUNCION EN DAO", asuntos, municipalidad);
+
+        let whereConditions = {};
+
+        // Condiciones para asuntos
+        if (asuntos.length > 0) {
+            const contieneOtros = asuntos.includes('Otros');
+            const otrosAsuntos = asuntos.filter(asunto => asunto !== 'Otros');
+
+            // Condición para "Otros"
+            if (contieneOtros) {
+                if (otrosAsuntos.length > 0) {
+                    whereConditions = {
+                        ...whereConditions,
+                        [Symbol.for('or')]: [
+                            { asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS } },
+                            { asunto: { [Symbol.for('in')]: otrosAsuntos } }
+                        ]
+                    };
+                } else {
+                    whereConditions = {
+                        ...whereConditions,
+                        asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS }
+                    };
+                }
+            } else if (otrosAsuntos.length > 0) {
+                whereConditions = {
+                    ...whereConditions,
+                    asunto: { [Symbol.for('in')]: otrosAsuntos }
+                };
+            }
+        }
+
+        // Condición para municipalidad
+        if (municipalidad) {
+            whereConditions = {
+                ...whereConditions,
+                municipalidad_id: municipalidad
+            };
+        }
+
         console.log('whereConditions:', whereConditions);
-    
-        const respuesta = await quejaRepository.findAll({
+
+        const respuesta = await modelo.findAll({
             where: whereConditions,
             include: [
-                { model: Estado},
-                { model: Ciudadano},
-                { model: Municipalidad},
+                { model: Estado },
+                { model: Ciudadano },
+                { model: Municipalidad },
             ]
-
         });
-        console.log("respuesta", respuesta)
-        if(respuesta){
+        console.log("respuesta", respuesta);
+
+        if (respuesta) {
             const datavaluesArray = respuesta.map(queja => queja.dataValues);
-            return datavaluesArray
-        }else{
-            return []
+            return datavaluesArray;
+        } else {
+            return [];
         }
-        
+
     } catch (error) {
         console.error('Error en findFiltered:', error);
         return null;
