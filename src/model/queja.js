@@ -41,6 +41,9 @@ const Queja = sequelize.define('queja', {
     },
     municipalidad_id: {
         type: DataTypes.INTEGER
+    },
+    calificacion: {
+        type: DataTypes.INTEGER
     }
 })
 

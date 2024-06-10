@@ -18,6 +18,9 @@ const Ciudadano = sequelize.define('ciudadano', {
     },
     usuario_id: {
         type: DataTypes.INTEGER
+    },
+    reputacion: {
+        type: DataTypes.FLOAT
     }
 })
 
