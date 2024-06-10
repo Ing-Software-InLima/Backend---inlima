@@ -17,7 +17,7 @@ import cookieParser from 'cookie-parser'
 
 var app = express();
 //app.use(bodyParser.json())
-app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.json({ limit: '500mb' }));
 const corsOptions = {
     origin: 'http://localhost:3000', // Origen del frontend
     credentials: true,
@@ -26,7 +26,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.json({ limit: '500mb' }));
 
 // Middleware para configurar las cabeceras de caché
 app.use((req, res, next) => {

@@ -12,8 +12,8 @@ const iniciarSesion = async (req, res) => {
         rol: usuarioEncontrado.rol_id,
         id: usuarioEncontrado.id,
         email: usuarioEncontrado.email,
-        nombre: usuarioEncontrado.nombre,
-        foto: usuarioEncontrado.foto
+        nombre: usuarioEncontrado.nombre
+        //foto: usuarioEncontrado.foto
       }, 'secret')
       res.cookie('myToken', token)
       return res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
@@ -26,10 +26,10 @@ const iniciarSesion = async (req, res) => {
 };
 
 const iniciarSesionGoogle = async (req, res) => {
-  const { email} = req.body;
+  const { email } = req.body;
   try {
     const usuarioEncontrado = await usuarioDAO.findOneByEmail(email)
-    if (usuarioEncontrado ) {
+    if (usuarioEncontrado) {
       const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
@@ -60,31 +60,19 @@ const cerrarSesion = async (req, res) => {
 }
 
 const actualizarCuenta = async (req, res) => {
-  const myToken = req.cookies?.mytoken;
-  try{
-    if (!myToken) {
-      return res.status(401).json({ success: false, message: 'No se encontró el token' });
-    }
+  const myToken = req.cookies?.myToken;
+  if (!myToken) {
+    return res.status(401).json({ success: false, message: 'Token no encontrado' });
+  }
+  try {
     const decoded = jwt.verify(myToken, 'secret');
     const { id } = decoded;
-    
-    const { email, password, nombre, apellido_paterno, apellido_materno, foto, rol_id, sexo_id} = req.body;
-
-    await usuarioDAO.update({
-      id: id,
-      email: email,
-      password: password,
-      nombre: nombre,
-      apellido_paterno: apellido_paterno,
-      apellido_materno: apellido_materno,
-      foto: foto,
-      rol_id: rol_id,
-      sexo_id: sexo_id
-    })
+    const { contraseña, imagen } = req.body;
+    await usuarioDAO.updatePerfil(id,contraseña,imagen)
 
     return res.status(200).json({ success: true, message: 'Datos actualizados con exito' });
-  }catch(error){
-    return res.status(500).json({ success: false, message: error.message });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'error.message' });
   }
 }
 
@@ -118,6 +106,38 @@ const encontrarUsuario = async (req, res) => {
   }
 };
 
-const usuarioController = { iniciarSesion, iniciarSesionGoogle, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario};
+const findUserToken = async (req, res) => {
+  const myToken = req.cookies?.myToken;
+  if (!myToken) {
+    return res.status(401).json({ success: false, message: 'Token no encontrado' });
+  }
+  try {
+    const decoded = jwt.verify(myToken, 'secret');
+    const { id } = decoded;
+    //const ciudadanoEncontrado = await ciudadanoDAO.findOne(id)
+    //const usuarioEncontrado = await usuarioDAO.findOne(ciudadanoEncontrado.usuario_id)
+    const usuarioEncontrado = await usuarioDAO.findOne(id)
+    console.log("USUARIO ENCONTRADO", usuarioEncontrado)
+    return res.status(200).json({ success: true, usuarioEncontrado });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'No se encontró el usuario' });
+  }
+};
+
+const findUserbyEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const findUser = await usuarioDAO.findOneByEmail(email);
+    if (findUser) {
+      return res.status(200).json({ success: true })
+    } else {
+      return res.status(200).json({ success: false, message: `No se encontró al usuario mediante el email: ${email}` })
+    }
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error al conectar!" })
+  }
+
+}
+const usuarioController = { iniciarSesion, iniciarSesionGoogle, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario, findUserToken, findUserbyEmail };
 
 export default usuarioController;

@@ -30,6 +30,22 @@ const remove = async (id) => {
     return await usuarioRepository.remove(id);
 };
 
-const usuarioDAO = { findAll, create, findOne, update, remove, findOneByEmail };
+
+const updatePerfil = async (id, contraseña, imagen) => {
+    try {
+        const user = await findOne(id);
+        if (!user) {
+            throw new Error('User no encontrada.');
+        }
+        user.id = id;
+        user.password = contraseña;
+        user.foto = imagen;
+        await user.save();
+        return user;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+const usuarioDAO = { findAll, create, findOne, update, remove, findOneByEmail, updatePerfil };
 
 export default usuarioDAO;
