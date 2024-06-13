@@ -56,13 +56,13 @@ const enviarCorreo = async (req, res) => {
             }
         });
         
-        const { email, estado, queja, nombre, asunto, fecha } = req.body;
+        const { email, estado, ticket, nombre, asunto, fecha } = req.body;
 
         // Configurar el correo
         const mailOptions = {
             from: 'inLimaApp@gmail.com',
             to: email,
-            subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET IL00${queja}`,
+            subject: `INLIMA: NOTIFICACIÓN CAMBIO DE ESTADO DE QUEJA - TICKET IL00${ticket}`,
             html: `
             <div style="
     font-family: Arial, sans-serif; 
