@@ -1,48 +1,61 @@
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
+import dotenv from 'dotenv';
 
+// instalar npm install dotenv
+// https://mail.google.com/
+
+dotenv.config();
 
 const enviarCorreo = async (req, res) => {
     try {
-        const credentials = {
-            installed: {
-                client_id: "341460726817-ubqk5qmhupp2a9bg9f40cdf29ffrr3vc.apps.googleusercontent.com",
-                project_id: "studious-karma-424718-n2",
-                auth_uri: "https://accounts.google.com/o/oauth2/auth",
-                token_uri: "https://oauth2.googleapis.com/token",
-                auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-                client_secret: "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",
+        const { 
+            CLIENT_ID, 
+            CLIENT_SECRET, 
+            REDIRECT_URI, 
+            REFRESH_TOKEN, 
+            USER_EMAIL 
+        } = process.env;
 
-                redirect_uris: [
-                    "urn:ietf:wg:oauth:2.0:oob",
-                    "http://localhost"
-                ],
-                refresh_token: "1//04r9KC04Akr6aCgYIARAAGAQSNwF-L9IrcxvwoModx9lj_-bbfQaxUXqtd9oytvsQc1uDBSAnZss1Sh-YshvgXpY10XTjsmBgvXg"
-            }
-        };
         const oAuth2Client = new google.auth.OAuth2(
-            credentials.installed.client_id,
-            credentials.installed.client_secret,
-            credentials.installed.redirect_uris[0]
+            CLIENT_ID,
+            CLIENT_SECRET,
+            REDIRECT_URI
         );
 
         // Establecer credenciales
-        oAuth2Client.setCredentials({
-            refresh_token: credentials.installed.refresh_token
-        });
+        oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+        let accessTokenResponse;
+        try {
+            accessTokenResponse = await oAuth2Client.getAccessToken();
+        } catch (err) {
+            console.error('Error obtaining access token:', err);
+            return res.status(500).json({ message: 'Failed to obtain access token', error: err.message });
+        }
+
+        if (!accessTokenResponse.token) {
+            return res.status(500).json({ message: 'Failed to retrieve access token' });
+        }
+
+        const accessToken = accessTokenResponse.token;
 
         // Configurar el transportador de nodemailer
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 type: 'OAuth2',
-                user: 'inLimaApp@gmail.com',
-                clientId: credentials.installed.client_id,
-                clientSecret: credentials.installed.client_secret,
-                refreshToken: credentials.installed.refresh_token,
-                accessToken: oAuth2Client.getAccessToken(),
+                user: USER_EMAIL,
+                clientId: CLIENT_ID,
+                clientSecret: CLIENT_SECRET,
+                refreshToken: REFRESH_TOKEN,
+                accessToken: accessToken,
+            },
+            tls: {
+                rejectUnauthorized: false,
             }
         });
+        
         const { email, estado, queja, nombre, asunto, fecha } = req.body;
 
         // Configurar el correo
