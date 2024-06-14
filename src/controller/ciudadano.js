@@ -107,16 +107,26 @@ const calcularReputacion = async (req, res) => {
             return res.status(404).json({ message: 'No se pudo actualizar la reputación del ciudadano' });
         }
 
-        // Devolver la respuesta con la reputación calculada
         return res.status(200).json({ success: true, message: 'Reputacion calculada correctamente.', ciudadano });
     } catch (error) {
-        // Manejar errores
         return res.status(500).json({ success: false, message: error.message });
     }
 };
+const encontrarCiudadano = async (req, res) => {
+    try {
+        const {id_usuario} = req.body
+        const ciudadano = await ciudadanoDAO.findOneByUserID(id_usuario)
+        if (!ciudadano) {
+            return res.status(404).json({ success: false, message: "Ciudadano no encontrado" });
+        }
+        return res.status(200).json({success:true,message:'ciudadano encontrado correctamente.', ciudadano})
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+}
 
 
 
-const ciudadanoController = { registrar, registrarGoogle, cambiarFoto, calcularReputacion };
+const ciudadanoController = { registrar, registrarGoogle, cambiarFoto, calcularReputacion, encontrarCiudadano };
 
 export default ciudadanoController;
