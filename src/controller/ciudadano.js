@@ -71,6 +71,14 @@ const cambiarFoto = async (req, res) =>{
     console.log("Foto cambiada");
 };
 
-const ciudadanoController = { registrar , registrarGoogle, cambiarFoto};
+const calcularReputacion = async (req,res) => { 
+    //reputacion
+    //-> Sumatoria(Todas las quejas que tengan calificacion) / (cantidad de quejas de quejas que tienen puntuacion o sea diferente de 0)
+    //const {id}
+};
+
+
+
+const ciudadanoController = { registrar , registrarGoogle, cambiarFoto,calcularReputacion};
 
 export default ciudadanoController;
