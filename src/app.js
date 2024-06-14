@@ -13,6 +13,7 @@ import usuarioRoutes from './routes/usuario.js'
 import administradorRoutes from './routes/administrador.js'
 import historialRoutes from './routes/historial.js'
 import notificadorRoutes from './routes/notificador.js'
+import tokenRoutes from './routes/token.js'
 import cookieParser from 'cookie-parser'
 
 var app = express();
@@ -50,5 +51,6 @@ app.use("/usuario", usuarioRoutes)
 app.use("/administrador", administradorRoutes)
 app.use("/historial", historialRoutes)
 app.use("/notificador",notificadorRoutes)
+app.use("/token", tokenRoutes)
 
 export default app;
