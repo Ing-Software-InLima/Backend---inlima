@@ -1,4 +1,4 @@
-// DAO/usuario.js
+// DAO/municipalidad.js
 import RepositoryBase from "../repository/base.js";
 import modelo from '../model/municipalidad.js';
 

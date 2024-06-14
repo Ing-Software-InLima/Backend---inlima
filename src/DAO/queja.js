@@ -1,4 +1,4 @@
-// DAO/usuario.js
+// DAO/queja.js
 import RepositoryBase from "../repository/base.js";
 import modelo from '../model/queja.js';
 import Ciudadano from '../model/ciudadano.js'

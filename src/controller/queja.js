@@ -57,7 +57,7 @@ const encontrarDistrito = async (req, res) => {
         const municipalidad = await municipalidadDAO.findOne(municipalidad_id);
 
         return res.status(200).json({ success: true, message: municipalidad.nombre });
-    }catch(erro){
+    }catch(error){
         return res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -116,7 +116,32 @@ const getQuejasUsuario = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado}
+const puntuacionQueja = async (req, res) => {
+
+    const {id} = req.params;
+    const {calificacion} = req.body;
+
+    try {
+        const queja = await quejaDAO.findOne(id);
+
+        if (!queja) {
+            return res.status(404).json({ message: 'Queja no encontrada' });
+        }
+        queja.dataValues.calificacion = calificacion;
+        const updatedQueja = await quejaDAO.update(queja);
+
+        if (!updatedQueja) {
+            return res.status(404).json({ message: 'No se pudo actualizar la queja' });
+        }
+
+        return res.status(200).json({ message: 'Puntuación actualizada con éxito', queja: updatedQueja });
+    } catch (error) {
+        console.error('Error al actualizar la puntuación de la queja:', error);
+        return res.status(500).json({ message: 'Error al actualizar la puntuación de la queja', error: error.message });
+    }
+};
+
+const quejaController = { agregarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado,puntuacionQueja}
 
 
 export default quejaController;

@@ -1,4 +1,4 @@
-// DAO/usuario.js
+// DAO/sexo.js
 import RepositoryBase from "../repository/base.js";
 import modelo from '../model/sexo.js';
 
