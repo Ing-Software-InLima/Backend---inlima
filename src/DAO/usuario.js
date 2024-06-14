@@ -46,6 +46,22 @@ const updatePerfil = async (id, contraseña, imagen) => {
         throw new Error(error.message);
     }
 };
-const usuarioDAO = { findAll, create, findOne, update, remove, findOneByEmail, updatePerfil };
+
+const resetPassword = async (id, contraseña) => {
+    try {
+        const user = await findOne(id);
+        if (!user) {
+            throw new Error('User no encontrada.');
+        }
+        user.id = id;
+        user.password = contraseña;
+        await user.save();
+        return user;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+const usuarioDAO = { findAll, create, findOne, update, remove, findOneByEmail, updatePerfil, resetPassword };
 
 export default usuarioDAO;

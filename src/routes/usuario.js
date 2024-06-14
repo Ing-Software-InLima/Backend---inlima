@@ -18,5 +18,6 @@ routes.post('/loginGoogle', controller2.iniciarSesionGoogle)
 routes.post('/findUserbyEmail', controller2.findUserbyEmail)
 routes.post('/actualizarCuenta', controller2.actualizarCuenta)
 routes.get('/logout', controller2.cerrarSesion)
+routes.post('/resetps', controller2.resetPassword)
 
 export default routes

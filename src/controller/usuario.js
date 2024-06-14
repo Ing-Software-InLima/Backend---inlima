@@ -138,6 +138,18 @@ const findUserbyEmail = async (req, res) => {
   }
 
 }
-const usuarioController = { iniciarSesion, iniciarSesionGoogle, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario, findUserToken, findUserbyEmail };
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const usuario = await usuarioDAO.findOneByEmail(email);
+    await usuarioDAO.resetPassword(usuario.id, password);
+    return res.status(200).json({ success: true, message: 'Datos actualizados con exito' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'error.message' });
+  }
+
+}
+const usuarioController = { iniciarSesion, iniciarSesionGoogle, cerrarSesion, actualizarCuenta, obtenerRol, encontrarUsuario, findUserToken, findUserbyEmail, resetPassword };
 
 export default usuarioController;
