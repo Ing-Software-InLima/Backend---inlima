@@ -1,7 +1,9 @@
 import quejaDAO from '../DAO/queja.js';
 import ciudadanoDAO from '../DAO/ciudadano.js';
 import municipalidadDAO from '../DAO/municipalidad.js';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import { Sequelize } from 'sequelize';
+import administradorDAO from '../DAO/administrador.js';
 const agregarQueja = async (req, res) => {
     const myToken = req.cookies?.myToken;
     try {
@@ -63,9 +65,73 @@ const encontrarDistrito = async (req, res) => {
 };
 
 const obtenerQuejasFiltradas = async (req, res) => {
+    const myToken = req.cookies?.myToken;
     try {
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
+        }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { id } = decoded;
+        const admin = await administradorDAO.findOneByUserID(id);
+
+        const ASUNTOS_PREDEFINIDOS = [
+            "Veredas rotas", "Calles contaminadas", "Poste de luces apagadas",
+            "Construcción sin licencia", "Comercio ilegal", "Invasión no autorizada de lugares públicos",
+            "Árboles obstruyen la circulación", "Vehículo abandonado", "Mascota perdida",
+            "Inmueble abandonado", "Propiedad en mal estado"
+        ];
+        
         const {asuntos, municipalidad} = req.body;
-        const resultados = await quejaDAO.findFiltered(asuntos, municipalidad);
+        let whereConditions = {};
+        // Condiciones para asuntos
+        if (asuntos.length > 0) {
+            const contieneOtros = asuntos.includes('Otros');
+            const otrosAsuntos = asuntos.filter(asunto => asunto !== 'Otros');
+
+            // Condición para "Otros"
+            if (contieneOtros) {
+                if (otrosAsuntos.length > 0) {
+                    whereConditions = {
+                        ...whereConditions,
+                        [Symbol.for('or')]: [
+                            { asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS } },
+                            { asunto: { [Symbol.for('in')]: otrosAsuntos } }
+                        ]
+                    };
+                } else {
+                    whereConditions = {
+                        ...whereConditions,
+                        asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS }
+                    };
+                }
+            } else if (otrosAsuntos.length > 0) {
+                whereConditions = {
+                    ...whereConditions,
+                    asunto: { [Symbol.for('in')]: otrosAsuntos }
+                };
+            }
+        }
+
+        // Condición para municipalidad
+        if (municipalidad) {
+            whereConditions = {
+                ...whereConditions,
+                municipalidad_id: municipalidad
+            };
+        }else{
+            const municipalidades = await municipalidadDAO.findAllByAdminID(admin.id);
+            const municipalidadIds = municipalidades.map(muni => muni.id);
+
+            whereConditions = {
+                ...whereConditions,
+                municipalidad_id: {
+                    [Sequelize.Op.in]: municipalidadIds
+                }
+            };
+        }
+
+        const resultados = await quejaDAO.findFiltered(whereConditions);
+
         res.status(200).json(resultados);
     } catch (error) {
         console.error('Error al obtener las quejas:', error);

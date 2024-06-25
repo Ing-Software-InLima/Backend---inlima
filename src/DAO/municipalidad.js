@@ -4,12 +4,21 @@ import modelo from '../model/municipalidad.js';
 
 const municipalidadRepository = new RepositoryBase(modelo);
 
-const findAll = async (req,res) => {
+const findAll = async () => {
+    return await municipalidadRepository.findAll();
+};
 
-    const municipalidades = await municipalidadRepository.findAll();
-
-    return res.status(200).json(municipalidades);
-}
+const findAllByAdminID = async (administrador_id) => {
+    try {
+        return await modelo.findAll({
+            where: { administrador_id }
+        })
+    }
+    catch(err) {
+        console.error(err);
+        return null;
+    }  
+};
 
 const create = async (data) => {
     return await municipalidadRepository.create(data);
@@ -27,6 +36,6 @@ const remove = async (id) => {
     return await municipalidadRepository.remove(id);
 };
 
-const municipalidadDAO = { findAll, create, findOne, update, remove };
+const municipalidadDAO = { findAll, findAllByAdminID, create, findOne, update, remove };
 
 export default municipalidadDAO;

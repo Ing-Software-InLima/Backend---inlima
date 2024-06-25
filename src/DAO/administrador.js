@@ -16,9 +16,15 @@ const findOne = async (id) => {
 };
 
 const findOneByUserID = async (usuario_id) => {
-    return await modelo.findOne({
-        where: { usuario_id }
-    })
+    try {
+        return await modelo.findOne({
+            where: { usuario_id }
+        })
+    }
+    catch(err) {
+        console.error(err);
+        return null;
+    }
 }
 
 const update = async (data) => {

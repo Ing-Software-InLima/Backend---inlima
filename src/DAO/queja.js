@@ -51,52 +51,9 @@ const ASUNTOS_PREDEFINIDOS = [
     "Inmueble abandonado", "Propiedad en mal estado"
 ];
 
-const findFiltered = async (asuntos, municipalidad) => {
-    try {
-        console.log("FUNCION EN DAO", asuntos, municipalidad);
-
-        let whereConditions = {};
-
-        // Condiciones para asuntos
-        if (asuntos.length > 0) {
-            const contieneOtros = asuntos.includes('Otros');
-            const otrosAsuntos = asuntos.filter(asunto => asunto !== 'Otros');
-
-            // Condición para "Otros"
-            if (contieneOtros) {
-                if (otrosAsuntos.length > 0) {
-                    whereConditions = {
-                        ...whereConditions,
-                        [Symbol.for('or')]: [
-                            { asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS } },
-                            { asunto: { [Symbol.for('in')]: otrosAsuntos } }
-                        ]
-                    };
-                } else {
-                    whereConditions = {
-                        ...whereConditions,
-                        asunto: { [Symbol.for('notIn')]: ASUNTOS_PREDEFINIDOS }
-                    };
-                }
-            } else if (otrosAsuntos.length > 0) {
-                whereConditions = {
-                    ...whereConditions,
-                    asunto: { [Symbol.for('in')]: otrosAsuntos }
-                };
-            }
-        }
-
-        // Condición para municipalidad
-        if (municipalidad) {
-            whereConditions = {
-                ...whereConditions,
-                municipalidad_id: municipalidad
-            };
-        }
-
-        console.log('whereConditions:', whereConditions);
-
-        const respuesta = await modelo.findAll({
+const findFiltered = async (whereConditions) => {
+    try{
+        return await modelo.findAll({
             where: whereConditions,
             include: [
                 { model: Estado },
@@ -104,17 +61,8 @@ const findFiltered = async (asuntos, municipalidad) => {
                 { model: Municipalidad },
             ]
         });
-        console.log("respuesta", respuesta);
-
-        if (respuesta) {
-            const datavaluesArray = respuesta.map(queja => queja.dataValues);
-            return datavaluesArray;
-        } else {
-            return [];
-        }
-
-    } catch (error) {
-        console.error('Error en findFiltered:', error);
+    }catch (err) {
+        console.error(err);
         return null;
     }
 };
