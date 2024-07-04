@@ -81,7 +81,7 @@ const obtenerQuejasFiltradas = async (req, res) => {
             "Inmueble abandonado", "Propiedad en mal estado"
         ];
         
-        const {asuntos, municipalidad} = req.body;
+        const {asuntos} = req.body;
         let whereConditions = {};
         // Condiciones para asuntos
         if (asuntos.length > 0) {
@@ -112,6 +112,7 @@ const obtenerQuejasFiltradas = async (req, res) => {
             }
         }
 
+        const municipalidad = admin.municipalidad_id;
         // Condición para municipalidad
         if (municipalidad) {
             whereConditions = {
@@ -119,7 +120,7 @@ const obtenerQuejasFiltradas = async (req, res) => {
                 municipalidad_id: municipalidad
             };
         }else{
-            const municipalidades = await municipalidadDAO.findAllByAdminID(admin.id);
+            const municipalidades = await municipalidadDAO.findAll();
             const municipalidadIds = municipalidades.map(muni => muni.id);
 
             whereConditions = {
