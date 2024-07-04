@@ -44,13 +44,6 @@ const remove = async (id) => {
     return await quejaRepository.remove(id);
 };
 
-const ASUNTOS_PREDEFINIDOS = [
-    "Veredas rotas", "Calles contaminadas", "Poste de luces apagadas",
-    "Construcción sin licencia", "Comercio ilegal", "Invasión no autorizada de lugares públicos",
-    "Árboles obstruyen la circulación", "Vehículo abandonado", "Mascota perdida",
-    "Inmueble abandonado", "Propiedad en mal estado"
-];
-
 const findFiltered = async (whereConditions) => {
     try{
         return await modelo.findAll({
@@ -99,4 +92,4 @@ const updateEstado = async (id, estado_id) => {
 
 const quejaDAO = { findAll, findAllbyCiudadanoID, create, findOne, update, remove , findFiltered, findOneByCiudadanoId, updateEstado};
 
-export default quejaDAO;
+export { quejaDAO as default };

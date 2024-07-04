@@ -64,4 +64,4 @@ const resetPassword = async (id, contraseña) => {
 
 const usuarioDAO = { findAll, create, findOne, update, remove, findOneByEmail, updatePerfil, resetPassword };
 
-export default usuarioDAO;
+export { usuarioDAO as default };

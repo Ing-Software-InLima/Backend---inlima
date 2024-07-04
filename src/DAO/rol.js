@@ -30,4 +30,4 @@ const remove = async (id) => {
 
 const rolDAO = { findAll, create, findOne, update, remove };
 
-export default rolDAO;
+export { rolDAO as default };

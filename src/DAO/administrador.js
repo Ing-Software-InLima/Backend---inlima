@@ -37,4 +37,4 @@ const remove = async (id) => {
 
 const administradorDAO = { findAll, create, findOne, findOneByUserID, update, remove };
 
-export default administradorDAO;
+export { administradorDAO as default };

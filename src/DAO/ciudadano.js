@@ -32,7 +32,7 @@ const findOneByUserID = async (usuario_id) => {
     try {
         return await modelo.findOne({
             where: { usuario_id }
-        })
+        });
     }
     catch(err) {
         console.error(err);
@@ -50,4 +50,4 @@ const remove = async (id) => {
 
 const ciudadanoDAO = { findAll, findAllbyID, create, findOne, findOneByUserID, update, remove };
 
-export default ciudadanoDAO;
+export { ciudadanoDAO as default };

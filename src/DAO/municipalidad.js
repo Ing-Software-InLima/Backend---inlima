@@ -26,4 +26,4 @@ const remove = async (id) => {
 
 const municipalidadDAO = { findAll, create, findOne, update, remove };
 
-export default municipalidadDAO;
+export { municipalidadDAO as default };

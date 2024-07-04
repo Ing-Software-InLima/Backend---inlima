@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "init": "node src/index.js --init"
@@ -19,13 +19,21 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "glob": "^9.0.0",
     "googleapis": "^137.1.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.13",
-    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemailer-smtp-transport": "^2.4.2",
     "nodemon": "^3.0.1",
     "pg": "^8.11.3",
     "resend": "^3.2.0",
     "sequelize": "^6.34.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

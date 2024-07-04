@@ -41,4 +41,4 @@ const remove = async (id) => {
 
 const tokenDAO = { findAll, create, findOne, findOneByEmail, update, remove };
 
-export default tokenDAO;
+export { tokenDAO as default };

@@ -25,4 +25,4 @@ const remove = async (id) => {
 
 const historialDAO = { findAll, create, findOne, update, remove };
 
-export default historialDAO;
+export { historialDAO as default };

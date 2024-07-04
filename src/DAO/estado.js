@@ -30,4 +30,4 @@ const remove = async (id) => {
 
 const estadoDAO = { findAll, create, findOne, update, remove };
 
-export default estadoDAO;
+export { estadoDAO as default };
