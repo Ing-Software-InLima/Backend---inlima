@@ -44,6 +44,9 @@ const Queja = sequelize.define('queja', {
     },
     calificacion: {
         type: DataTypes.INTEGER
+    },
+    prioridad: {
+        type: DataTypes.INTEGER
     }
 })
 
