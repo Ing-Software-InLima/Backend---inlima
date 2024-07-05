@@ -21,6 +21,7 @@
     "express": "^4.19.2",
     "glob": "^9.0.0",
     "googleapis": "^137.1.0",
+    "jest-mock-req-res": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.13",
     "nodemailer-smtp-transport": "^2.4.2",

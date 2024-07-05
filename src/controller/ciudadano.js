@@ -75,43 +75,54 @@ const cambiarFoto = async (req, res) => {
 const calcularReputacion = async (req, res) => {
     try {
         const { id_ciudadano } = req.body;
-        
-        // Obtener el ciudadano
-        const ciudadano = await ciudadanoDAO.findOne(id_ciudadano);
 
-        // Obtener todas las quejas del ciudadano
+        // Obtener el ciudadano por su ID
+        const ciudadano = await ciudadanoDAO.findOne(id_ciudadano);
+        // Verificar si el ciudadano existe
+        if (!ciudadano) {
+            return res.status(404).json({ success: false, message: 'Ciudadano no encontrado' });
+        }
+
+        // Obtener todas las quejas del ciudadano por su ID
         const quejasCiudadano = await quejaDAO.findAllbyCiudadanoID(id_ciudadano);
-        
-        let Sumadorreputacion = 0;
+
+        let sumadorReputacion = 0;
         let quejasConPuntuacion = 0;
         let reputacion = 0;
-        
+
         // Iterar sobre cada queja del ciudadano
         for (let i = 0; i < quejasCiudadano.length; i++) {
             if (quejasCiudadano[i].calificacion !== null) {
-                Sumadorreputacion += quejasCiudadano[i].calificacion;
+                sumadorReputacion += quejasCiudadano[i].calificacion;
                 quejasConPuntuacion++;
             }
         }
-        
+
         // Calcular la reputación promedio si hay quejas con calificación
         if (quejasConPuntuacion > 0) {
-            reputacion = Sumadorreputacion / quejasConPuntuacion;
+            reputacion = sumadorReputacion / quejasConPuntuacion;
         }
 
-        ciudadano.reputacion = reputacion
-
+        // Actualizar la reputación del ciudadano en la base de datos
+        ciudadano.reputacion = reputacion;
         const updatedreputacionCiuda = await ciudadanoDAO.update(ciudadano);
 
         if (!updatedreputacionCiuda) {
             return res.status(404).json({ message: 'No se pudo actualizar la reputación del ciudadano' });
         }
 
-        return res.status(200).json({ success: true, message: 'Reputacion calculada correctamente.', ciudadano });
+        // Devolver una respuesta exitosa con la reputación calculada y el ciudadano actualizado
+        return res.status(200).json({ success: true, message: 'Reputación calculada correctamente.', ciudadano });
     } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+        // Capturar cualquier error y devolver una respuesta de error
+        return res.status(500).json({ success: false, message: 'Error interno del servidor'});
+        
     }
 };
+
+
+
+
 const encontrarCiudadano = async (req, res) => {
     try {
         const {id_usuario} = req.body
