@@ -97,12 +97,10 @@ const calcularReputacion = async (req, res) => {
                 quejasConPuntuacion++;
             }
         }
-
         // Calcular la reputación promedio si hay quejas con calificación
         if (quejasConPuntuacion > 0) {
             reputacion = sumadorReputacion / quejasConPuntuacion;
         }
-
         // Actualizar la reputación del ciudadano en la base de datos
         ciudadano.reputacion = reputacion;
         const updatedreputacionCiuda = await ciudadanoDAO.update(ciudadano);
@@ -110,11 +108,9 @@ const calcularReputacion = async (req, res) => {
         if (!updatedreputacionCiuda) {
             return res.status(404).json({ message: 'No se pudo actualizar la reputación del ciudadano' });
         }
-
         // Devolver una respuesta exitosa con la reputación calculada y el ciudadano actualizado
         return res.status(200).json({ success: true, message: 'Reputación calculada correctamente.', ciudadano });
     } catch (error) {
-        // Capturar cualquier error y devolver una respuesta de error
         return res.status(500).json({ success: false, message: 'Error interno del servidor'});
         
     }
