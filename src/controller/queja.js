@@ -34,7 +34,7 @@ const agregarQueja = async (req, res) => {
         });
         return res.status(200).json({ success: true, message: "Queja enviada", data: queja });
     } catch (error) {
-        console.error("Error al agregar queja:", error); // Agregar logs detallados
+        //console.error("Error al agregar queja:", error); // Agregar logs detallados
         return res.status(500).json({ success: false, message: error.message });
     }
 };

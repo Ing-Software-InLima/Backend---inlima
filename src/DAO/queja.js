@@ -23,7 +23,7 @@ const findAllbyCiudadanoID = async (ciudadano_id) => {
         })
     }
     catch(err) {
-        console.error(err);
+        //console.error(err);
         return null;
     }
 };
@@ -55,7 +55,7 @@ const findFiltered = async (whereConditions) => {
             ]
         });
     }catch (err) {
-        console.error(err);
+        //console.error(err);
         return null;
     }
 };
@@ -71,7 +71,7 @@ const findOneByCiudadanoId = async (id) => {
             ]
         });
     } catch (err) {
-        console.error(err);
+        //console.error(err);
         return null;
     }
 };

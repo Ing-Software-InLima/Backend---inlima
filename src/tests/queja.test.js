@@ -21,11 +21,63 @@ describe('Queja Controller', () => {
     );
   });
 
-  it('should add a new queja', async () => {
-    // Verificar que el mock se está configurando correctamente
-    //console.log(ciudadanoDAO);
-    //console.log(quejaDAO);
+  it('Debe retornar status 500 cuando la base de datos no está funcionando correctamente', async () => {
+    // Simular que la base de datos no está corriendo
+    ciudadanoDAO.findOneByUserID.mockRejectedValue(new Error('Database not running'));
+    const response = await request(app)
+      .post('/queja/create')
+      .set('Cookie', `myToken=${token}`)
+      .send({
+        asunto: 'Queja de prueba',
+        descripcion: 'Descripción de prueba',
+        foto: 'foto.jpg',
+        ubicacion_descripcion: 'Ubicación de prueba',
+        latitud: -12.0464,
+        longitud: -77.0428,
+        municipalidad: 1
+      });
 
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('message', 'Database not running');
+  });
+
+  it('Debe retornar status 401 cuando el token de la cookie no se encuentre', async () => {
+    const response = await request(app)
+      .post('/queja/create')
+      .send({
+        asunto: 'Queja de prueba',
+        descripcion: 'Descripción de prueba',
+        foto: 'foto.jpg',
+        ubicacion_descripcion: 'Ubicación de prueba',
+        latitud: -12.0464,
+        longitud: -77.0428,
+        municipalidad: 1
+      });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).toHaveProperty('message', 'No se encontró el token');
+  });
+
+  it('Debe retornar status 401 cuando no se encuentra el id del usuario en la base de datos', async () => {
+    ciudadanoDAO.findOneByUserID.mockResolvedValue(null);
+    const response = await request(app)
+      .post('/queja/create')
+      .set('Cookie', `myToken=${token}`)
+      .send({
+        asunto: 'Queja de prueba',
+        descripcion: 'Descripción de prueba',
+        foto: 'foto.jpg',
+        ubicacion_descripcion: 'Ubicación de prueba',
+        latitud: -12.0464,
+        longitud: -77.0428,
+        municipalidad: 1
+      });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty('message', 'Ciudadano no encontrado');
+  });
+
+  it('Debe retornar status 200 y registrar la queja', async () => {
     ciudadanoDAO.findOneByUserID.mockResolvedValue({
       id: 53 // Usando el ID específico de usuario
     });
@@ -55,7 +107,7 @@ describe('Queja Controller', () => {
     };
 
     const response = await request(app)
-      .post('/queja/create') // Usa la ruta correcta
+      .post('/queja/create')
       .set('Cookie', `myToken=${token}`)
       .send(newQueja);
 

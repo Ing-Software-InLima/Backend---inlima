@@ -1,36 +1,41 @@
-jest.mock('../DAO/usuario'); // Indica a Jest que use el mock para usuarioDAO
+// src/tests/usuario.test.js
+import request from 'supertest';
+import app from '../app.js';
+import usuarioDAO from '../DAO/usuario.js';
 
-const request = require('supertest');
-const app = require('../app').default; // Importar la aplicación exportada por defecto
-const usuarioDAO = require('../DAO/usuario').default; // Importar el mock del DAO para usuario
-const jwt = require('jsonwebtoken');
+jest.mock('../DAO/usuario.js');
 
-describe('Usuario Controller', () => {
-  it('should log in a user successfully', async () => {
-    const user = {
-      id: 1,
-      email: 'test@example.com',
-      password: 'password123',
-      rol_id: 2,
-      nombre: 'Test User'
-    };
-
-    usuarioDAO.findOneByEmail.mockResolvedValue(user);
+describe('Usuario Controller - iniciarSesion', () => {
+  it('Debe retornar status 200 y establecer una cookie cuando el login es exitoso', async () => {
+    usuarioDAO.findOneByEmail.mockResolvedValue({ email: 'test@example.com', password: 'password', rol_id: 1, id: 1, nombre: 'Test User' });
 
     const response = await request(app)
-      .post('/usuario/login') // Asegúrate de usar la ruta correcta
-      .send({ email: user.email, password: user.password });
+      .post('/usuario/login')
+      .send({ email: 'test@example.com', password: 'password' });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('message', 'Inicio de sesión exitoso');
+    expect(response.headers['set-cookie']).toBeDefined();
   });
 
-  it('should fail to log in a user with incorrect credentials', async () => {
+  it('Debe retornar status 401 cuando el correo no existe en la base de datos', async () => {
     usuarioDAO.findOneByEmail.mockResolvedValue(null);
 
     const response = await request(app)
-      .post('/usuario/login') // Asegúrate de usar la ruta correcta
+      .post('/usuario/login')
+      .send({ email: 'nonexistent@example.com', password: 'password' });
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'Credenciales incorrectas');
+  });
+
+  it('Debe retornar status 401 cuando la contraseña es incorrecta', async () => {
+    usuarioDAO.findOneByEmail.mockResolvedValue({ email: 'test@example.com', password: 'password', rol_id: 1, id: 1, nombre: 'Test User' });
+
+    const response = await request(app)
+      .post('/usuario/login')
       .send({ email: 'test@example.com', password: 'wrongpassword' });
 
     expect(response.statusCode).toBe(401);
@@ -38,35 +43,54 @@ describe('Usuario Controller', () => {
     expect(response.body).toHaveProperty('message', 'Credenciales incorrectas');
   });
 
-  it('should log in a user successfully with Google', async () => {
-    const user = {
-      id: 1,
-      email: 'test@example.com',
-      rol_id: 2,
-      nombre: 'Test User',
-      foto: 'url_to_photo'
-    };
-
-    usuarioDAO.findOneByEmail.mockResolvedValue(user);
+  it('Debe retornar status 500 cuando la base de datos no está funcionando correctamente', async () => {
+    usuarioDAO.findOneByEmail.mockRejectedValue(new Error('Database error'));
 
     const response = await request(app)
-      .post('/usuario/loginGoogle') // Asegúrate de usar la ruta correcta
-      .send({ email: user.email });
+      .post('/usuario/login')
+      .send({ email: 'test@example.com', password: 'password' });
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'Database error');
+  });
+});
+
+describe('Usuario Controller - iniciarSesionGoogle', () => {
+  it('Debe retornar status 200 y establecer una cookie cuando el login con Google es exitoso', async () => {
+    usuarioDAO.findOneByEmail.mockResolvedValue({ email: 'test@example.com', rol_id: 1, id: 1, nombre: 'Test User' });
+
+    const response = await request(app)
+      .post('/usuario/loginGoogle')
+      .send({ email: 'test@example.com' });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('message', 'Inicio de sesión exitoso');
+    expect(response.headers['set-cookie']).toBeDefined();
   });
 
-  it('should fail to log in a user with Google if not registered', async () => {
+  it('Debe retornar status 401 cuando el correo no existe en la base de datos', async () => {
     usuarioDAO.findOneByEmail.mockResolvedValue(null);
 
     const response = await request(app)
-      .post('/usuario/loginGoogle') // Asegúrate de usar la ruta correcta
-      .send({ email: 'test@example.com' });
+      .post('/usuario/loginGoogle')
+      .send({ email: 'nonexistent@example.com' });
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('message', 'Credenciales incorrectas');
+  });
+
+  it('Debe retornar status 500 cuando la base de datos no está funcionando correctamente', async () => {
+    usuarioDAO.findOneByEmail.mockRejectedValue(new Error('Database error'));
+
+    const response = await request(app)
+      .post('/usuario/loginGoogle')
+      .send({ email: 'test@example.com' });
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'Database error');
   });
 });
