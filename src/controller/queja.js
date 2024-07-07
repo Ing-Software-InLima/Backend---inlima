@@ -34,6 +34,9 @@ const agregarQueja = async (req, res) => {
         });
         return res.status(200).json({ success: true, message: "Queja enviada", data: queja });
     } catch (error) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        }
         //console.error("Error al agregar queja:", error); // Agregar logs detallados
         return res.status(500).json({ success: false, message: error.message });
     }
@@ -166,7 +169,7 @@ const updateEstado = async (req, res) => {
         return res.status(500).json({ message: 'Error al actualizar el estado', error });
     }
 };
-
+/*
 const getQuejasUsuario = async (req, res) => {
     const myToken = req.cookies?.myToken;
     try {
@@ -181,7 +184,27 @@ const getQuejasUsuario = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });
     }
+};*/
+
+const getQuejasUsuario = async (req, res) => {
+    const myToken = req.cookies?.myToken;
+    try {
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
+        }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { id } = decoded;
+        const ciudadano = await ciudadanoDAO.findOneByUserID(id);
+        const quejas = await quejaDAO.findAllbyCiudadanoID(ciudadano.id);
+        return res.status(200).json(quejas);
+    } catch (error) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        }
+        return res.status(500).json({ success: false, message: error.message });
+    }
 };
+
 
 const puntuacionQueja = async (req, res) => {
 
