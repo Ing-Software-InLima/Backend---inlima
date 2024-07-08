@@ -73,8 +73,7 @@ describe('Queja Controller - obtenerQuejasFiltradas', () => {
     expect(response.body[0]).toHaveProperty('asunto', 'Construcción sin licencia');
   });
 
-  it('Debe retornar status 200 y filtrar quejas por municipalidad', async () => {
-    administradorDAO.findOneByUserID.mockResolvedValue({ municipalidad_id: 33 });
+  it('Debe retornar status 200 y filtrar sin municipalidad', async () => {
     quejaDAO.findFiltered.mockResolvedValue([{ asunto: 'Inmueble abandonado' }]);
 
     const response = await request(app)
