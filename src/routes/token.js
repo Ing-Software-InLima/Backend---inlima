@@ -7,6 +7,7 @@ const routes = express.Router()
 //routes.get('/', controller.findAll )
 
 routes.post('/sendtoken', controller2.enviarToken)
+routes.post('/sendtokenreset', controller2.enviarTokenReseteo)
 routes.post('/verifytoken', controller2.verificarToken)
 
 export default routes
