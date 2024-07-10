@@ -230,7 +230,19 @@ const puntuacionQueja = async (req, res) => {
     }
 };
 
-const quejaController = { agregarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado,puntuacionQueja}
+const prioridadQueja = async (req, res) => {
+    const { id } = req.params;
+    const { prioridad } = req.body;
+    console.log("prioridad 1", prioridad)
+    try {
+        const queja = await quejaDAO.updatePrioridad(id, prioridad);
+        return res.status(200).json({ message: 'Prioridad actualizada con éxito', queja });
+    } catch (error) {
+        return res.status(500).json({ message: 'Error al actualizar prioridad', error });
+    }
+}
+
+const quejaController = { agregarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado,puntuacionQueja, prioridadQueja}
 
 
 export default quejaController;

@@ -90,6 +90,21 @@ const updateEstado = async (id, estado_id) => {
     }
 };
 
-const quejaDAO = { findAll, findAllbyCiudadanoID, create, findOne, update, remove , findFiltered, findOneByCiudadanoId, updateEstado};
+const updatePrioridad = async (id, prioridad_id) => {
+    try {
+        const queja = await findOne(id);
+        if (!queja) {
+            throw new Error('Queja no encontrada.');
+        }
+        console.log(prioridad_id)
+        queja.prioridad = prioridad_id;
+        await queja.save();
+        return queja;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+const quejaDAO = { findAll, findAllbyCiudadanoID, create, findOne, update, remove , findFiltered, findOneByCiudadanoId, updateEstado, updatePrioridad};
 
 export { quejaDAO as default };
