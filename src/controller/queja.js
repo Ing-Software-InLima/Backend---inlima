@@ -231,12 +231,21 @@ const puntuacionQueja = async (req, res) => {
 };
 
 const prioridadQueja = async (req, res) => {
+    const myToken = req.cookies?.myToken;
     const { id } = req.params;
     const { prioridad } = req.body;
-    console.log("prioridad 1", prioridad)
     try {
-        const queja = await quejaDAO.updatePrioridad(id, prioridad);
-        return res.status(200).json({ message: 'Prioridad actualizada con éxito', queja });
+        if (!myToken) {
+            return res.status(401).json({ success: false, message: 'No se encontró el token' });
+        }
+        const decoded = jwt.verify(myToken, 'secret');
+        const { rol } = decoded;
+        if(rol != 2){//no es admin
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        }else{
+            const queja = await quejaDAO.updatePrioridad(id, prioridad);
+            return res.status(200).json({ message: 'Prioridad actualizada con éxito', queja });
+        }
     } catch (error) {
         return res.status(500).json({ message: 'Error al actualizar prioridad', error });
     }
