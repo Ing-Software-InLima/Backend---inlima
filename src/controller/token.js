@@ -60,7 +60,6 @@ const enviarToken = async (req, res) => {
 
         const ciudadano = await usuarioDAO.findOneByEmail(email);
         if (ciudadano) {
-            console.log("guardaaaa")
             return res.status(204).json({ message: 'El usuario ya ha sido registrado. Intenté con otro correo.' });
         }
         
