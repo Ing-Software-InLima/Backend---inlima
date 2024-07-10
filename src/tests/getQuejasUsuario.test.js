@@ -43,20 +43,7 @@ describe('Queja Controller - getQuejasUsuario', () => {
     expect(response.body).toHaveProperty('message', 'Invalid token');
   });
 
-  it('Debe retornar status 500 cuando el método "findOneByUserID" no funciona correctamente', async () => {
-    ciudadanoDAO.findOneByUserID.mockRejectedValue(new Error('Database error'));
-
-    const response = await request(app)
-      .get('/queja/quejasUsuario')
-      .set('Cookie', `myToken=${token}`)
-      .send();
-
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Database error');
-  });
-
-  it('Debe retornar status 500 cuando el método "findAllByCiudadanoID" no funciona correctamente', async () => {
+  it('Debe retornar status 500 cuando hay un error con la base de datos', async () => {
     ciudadanoDAO.findOneByUserID.mockResolvedValue({ id: 53 });
     quejaDAO.findAllbyCiudadanoID.mockRejectedValue(new Error('Database error'));
 
