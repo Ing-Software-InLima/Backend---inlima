@@ -8,6 +8,9 @@ const iniciarSesion = async (req, res) => {
     const usuarioEncontrado = await usuarioDAO.findOneByEmail(email)
     if (usuarioEncontrado && usuarioEncontrado.password === password) {
       const token = jwt.sign({
+        httpOnly: true,
+        secure: false, // No seguro, solo para desarrollo
+        sameSite: 'None',
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
         id: usuarioEncontrado.id,
@@ -31,6 +34,9 @@ const iniciarSesionGoogle = async (req, res) => {
     const usuarioEncontrado = await usuarioDAO.findOneByEmail(email)
     if (usuarioEncontrado) {
       const token = jwt.sign({
+        httpOnly: true,
+        secure: false, // No seguro, solo para desarrollo
+        sameSite: 'None',
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
         rol: usuarioEncontrado.rol_id,
         id: usuarioEncontrado.id,
