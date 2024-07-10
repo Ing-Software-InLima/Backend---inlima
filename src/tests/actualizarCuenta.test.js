@@ -3,17 +3,16 @@ import app from '../app';
 import usuarioDAO from '../DAO/usuario';
 import jwt from 'jsonwebtoken';
 
-jest.mock('../DAO/usuario'); // Mock usuarioDAO
+jest.mock('../DAO/usuario');
 
 describe('Usuario Controller - actualizarCuenta', () => {
     let validToken;
 
     beforeAll(() => {
-        // Create a valid token for a user
         validToken = jwt.sign(
             {
                 exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                id: 1, // User ID
+                id: 1,
                 email: 'test@example.com',
                 nombre: 'Test User'
             },
