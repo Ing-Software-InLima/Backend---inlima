@@ -2,7 +2,8 @@ import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
-import tokenDAO from '../DAO/token.js'
+import tokenDAO from '../DAO/token.js';
+import usuarioDAO from '../DAO/usuario.js';
 
 dotenv.config();
 
@@ -54,11 +55,17 @@ const enviarToken = async (req, res) => {
         });
         
         const { email } = req.body;
-        console.log('hola');
-        console.log(email);
+        //console.log('hola');
+        //console.log(email);
 
+        const ciudadano = await usuarioDAO.findOneByEmail(email);
+        if (ciudadano) {
+            return res.status(204).json({ message: 'El usuario ya ha sido registrado. Intenté con otro correo.' });
+        }
+        
         const aux = await tokenDAO.findOneByEmail(email);
-        console.log(aux);
+
+        //console.log(aux);
         if(aux){
             await tokenDAO.remove(aux.id);
         }
@@ -139,7 +146,7 @@ const enviarToken = async (req, res) => {
         };
 
         const envio = await transporter.sendMail(mailOptions);
-        console.log('prueba')
+        //console.log('prueba')
 
         if (envio){
             const tokenEnviado = await tokenDAO.create({
@@ -147,7 +154,7 @@ const enviarToken = async (req, res) => {
                 token: token
             })
 
-            console.log('prueba')
+            //console.log('prueba')
             
             if (tokenEnviado){
                 res.status(200).json({ message: 'Email sent successfully' });
@@ -155,7 +162,7 @@ const enviarToken = async (req, res) => {
         }
         
     } catch (error) {
-        console.error(error);
+        console.error('entraaaaaaa');
         res.status(500).json({ message: 'Failed to send email', error: error.message });
     }
 };
@@ -203,7 +210,7 @@ const verificarToken = async (req, res) => {
         }
 
     } catch (error) {
-        console.error(error);
+        console.error(entraaaaaaaa)
         res.status(500).json({ message: 'Fail', error: error.message });
     }
 };
