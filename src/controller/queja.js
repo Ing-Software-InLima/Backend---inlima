@@ -241,15 +241,19 @@ const prioridadQueja = async (req, res) => {
         const decoded = jwt.verify(myToken, 'secret');
         const { rol } = decoded;
         if(rol != 2){//no es admin
-            return res.status(401).json({ success: false, message: 'Invalid token' });
+            return res.status(401).json({ success: false, message: 'Usuario no es administrador' });
         }else{
             const queja = await quejaDAO.updatePrioridad(id, prioridad);
             return res.status(200).json({ message: 'Prioridad actualizada con éxito', queja });
         }
     } catch (error) {
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        }
         return res.status(500).json({ message: 'Error al actualizar prioridad', error });
     }
 }
+
 
 const quejaController = { agregarQueja, encontrarDistrito, encontrarUbicacion , obtenerQuejasFiltradas, obtenerQuejaConDetalles, getQuejasUsuario, updateEstado,puntuacionQueja, prioridadQueja}
 
