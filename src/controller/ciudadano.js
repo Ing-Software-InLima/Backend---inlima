@@ -116,9 +116,6 @@ const calcularReputacion = async (req, res) => {
     }
 };
 
-
-
-
 const encontrarCiudadano = async (req, res) => {
     try {
         const {id_usuario} = req.body
@@ -131,8 +128,6 @@ const encontrarCiudadano = async (req, res) => {
         return res.status(500).json({ success: false, message: error.message });
     }
 }
-
-
 
 const ciudadanoController = { registrar, registrarGoogle, cambiarFoto, calcularReputacion, encontrarCiudadano };
 

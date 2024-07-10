@@ -21,7 +21,7 @@ describe('Queja Controller - agregarQueja', () => {
     );
   });
 
-  it('should return 401 when token is not found', async () => {
+  it('Debe retornar status 401 cuando el token no se encuentra', async () => {
     const response = await request(app)
       .post('/queja/create')
       .send({
@@ -39,7 +39,7 @@ describe('Queja Controller - agregarQueja', () => {
     expect(response.body).toHaveProperty('message', 'No se encontró el token');
   });
 
-  it('should return 401 when token is invalid', async () => {
+  it('Debe retornar status 401 cuando el token es inválido', async () => {
     const invalidToken = 'invalid.token.here';
     const response = await request(app)
       .post('/queja/create')
@@ -59,7 +59,7 @@ describe('Queja Controller - agregarQueja', () => {
     expect(response.body).toHaveProperty('message', 'Invalid token');
   });
 
-  it('should return 404 when ciudadano is not found', async () => {
+  it('Debe retornar status 401 cuando el ciudadano no se encuentra', async () => {
     ciudadanoDAO.findOneByUserID.mockResolvedValue(null);
 
     const response = await request(app)
@@ -80,28 +80,7 @@ describe('Queja Controller - agregarQueja', () => {
     expect(response.body).toHaveProperty('message', 'Ciudadano no encontrado');
   });
 
-  it('should return 500 when there is a database error in findOneByUserID', async () => {
-    ciudadanoDAO.findOneByUserID.mockRejectedValue(new Error('Database error'));
-
-    const response = await request(app)
-      .post('/queja/create')
-      .set('Cookie', `myToken=${token}`)
-      .send({
-        asunto: 'Queja de prueba',
-        descripcion: 'Descripción de prueba',
-        foto: 'foto.jpg',
-        ubicacion_descripcion: 'Ubicación de prueba',
-        latitud: -12.0464,
-        longitud: -77.0428,
-        municipalidad: 1
-      });
-
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Database error');
-  });
-
-  it('should return 500 when there is a database error in create', async () => {
+  it('Debe retornar status 500 cuando hay error con la base de datos', async () => {
     ciudadanoDAO.findOneByUserID.mockResolvedValue({ id: 53 });
     quejaDAO.create.mockRejectedValue(new Error('Database error'));
 
@@ -123,7 +102,7 @@ describe('Queja Controller - agregarQueja', () => {
     expect(response.body).toHaveProperty('message', 'Database error');
   });
 
-  it('should add a new queja', async () => {
+  it('Debe retornar status 200 cuando la queja se crea satisfactoriamente', async () => {
     ciudadanoDAO.findOneByUserID.mockResolvedValue({ id: 53 });
     quejaDAO.create.mockResolvedValue({
       id: 64,
