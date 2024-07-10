@@ -72,7 +72,7 @@ const actualizarCuenta = async (req, res) => {
 
     return res.status(200).json({ success: true, message: 'Datos actualizados con exito' });
   } catch (error) {
-    return res.status(500).json({ success: false, message: 'error.message' });
+    return res.status(500).json({ success: false, message: error.message });
   }
 }
 
