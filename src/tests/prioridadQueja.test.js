@@ -3,7 +3,7 @@ import app from '../app';
 import quejaDAO from '../DAO/queja';
 import jwt from 'jsonwebtoken';
 
-jest.mock('../DAO/queja'); // Mock quejaDAO
+jest.mock('../DAO/queja');
 
 describe('Queja Controller - prioridadQueja', () => {
     let tokenAdmin, tokenUser;
@@ -12,7 +12,7 @@ describe('Queja Controller - prioridadQueja', () => {
         tokenAdmin = jwt.sign(
             {
                 exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                rol: 2 // Admin role
+                rol: 2
             },
             'secret'
         );
@@ -20,7 +20,7 @@ describe('Queja Controller - prioridadQueja', () => {
         tokenUser = jwt.sign(
             {
                 exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                rol: 1 // User role
+                rol: 1
             },
             'secret'
         );
@@ -53,7 +53,7 @@ describe('Queja Controller - prioridadQueja', () => {
         const invalidToken = jwt.sign(
             {
                 exp: Math.floor(Date.now() / 1000) + 60 * 60,
-                rol: 1 // Invalid role
+                rol: 1
             },
             'invalid_secret'
         );
