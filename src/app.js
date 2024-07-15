@@ -17,6 +17,7 @@ import tokenRoutes from './routes/token.js'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv';
 
+dotenv.config();
 var app = express();
 //app.use(bodyParser.json())
 app.use(bodyParser.json({ limit: '500mb' }));
@@ -25,7 +26,6 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 200
 };
-dotenv.config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: '500mb' }));
