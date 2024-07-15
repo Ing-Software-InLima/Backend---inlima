@@ -15,6 +15,7 @@ import historialRoutes from './routes/historial.js'
 import notificadorRoutes from './routes/notificador.js'
 import tokenRoutes from './routes/token.js'
 import cookieParser from 'cookie-parser'
+import dotenv from 'dotenv';
 
 var app = express();
 //app.use(bodyParser.json())
@@ -24,7 +25,7 @@ const corsOptions = {
     credentials: true,
     optionsSuccessStatus: 200
 };
-
+dotenv.config();
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: '500mb' }));
