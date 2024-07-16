@@ -15,7 +15,13 @@ const iniciarSesion = async (req, res) => {
         nombre: usuarioEncontrado.nombre
         //foto: usuarioEncontrado.foto
       }, 'secret')
-      res.cookie('myToken', token)
+      res.cookie('myToken', token,
+        {
+          httpOnly: true,
+          secure: true, // Solo envía la cookie en solicitudes HTTPS
+          sameSite: 'None' // Permite el envío de cookies entre sitios
+        }
+      )
       return res.status(200).json({ success: true, message: 'Inicio de sesión exitoso' });
     } else {
       return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
