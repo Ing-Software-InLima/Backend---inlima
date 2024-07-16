@@ -22,7 +22,7 @@ var app = express();
 //app.use(bodyParser.json())
 app.use(bodyParser.json({ limit: '500mb' }));
 const corsOptions = {
-    origin: 'http://localhost:3000', // Origen del frontend
+    origin: 'https://inlima.vercel.app', // Origen del frontend
     credentials: true,
     optionsSuccessStatus: 200
 };
