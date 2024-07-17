@@ -22,7 +22,7 @@ var app = express();
 //app.use(bodyParser.json())
 app.use(bodyParser.json({ limit: '1000mb' }));
 const corsOptions = {
-    origin: ['https://inlima.vercel.app','https://inlima.vercel.app/login','http://localhost:3000','https://inlima.azurewebsites.net/login','https://inlima.azurewebsites.net'], // Origen del frontend
+    origin: ['https://inlima.vercel.app','https://inlima.vercel.app/login','http://localhost:3000','http://localhost:3000/login','https://inlima.azurewebsites.net/login','https://inlima.azurewebsites.net','https://www.inlima.online','https://www.inlima.online/login'], // Origen del frontend
     credentials: true,
     optionsSuccessStatus: 200,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-    return res.json({ result: 'OK' })
+    return res.json({ result: 'OKI DOKI uwu' })
 })
 
 app.use("/ciudadano", ciudadanoRoutes)
