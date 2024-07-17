@@ -20,15 +20,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 var app = express();
 //app.use(bodyParser.json())
-app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.json({ limit: '1000mb' }));
 const corsOptions = {
-    origin: 'https://inlima.vercel.app', // Origen del frontend
+    origin: ['https://inlima.vercel.app','https://inlima.vercel.app/login','http://localhost:3000','https://inlima.azurewebsites.net/login','https://inlima.azurewebsites.net'], // Origen del frontend
     credentials: true,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 };
 app.use(cors(corsOptions));
 app.use(cookieParser());
-app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.json({ limit: '1000mb' }));
 
 // Middleware para configurar las cabeceras de caché
 app.use((req, res, next) => {
